@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-// 
+// iverilog -g2012 -o sim/sim.out sim/top_level_indexing_tb.sv hdl/top_level.sv  hdl/xilinx_single_port_ram_read_first.v
 
 module top_level_indexing_tb;
     logic clk_in;
@@ -35,7 +35,8 @@ module top_level_indexing_tb;
         #10;
         new_frame_in = 0;
 
-        #100000000;
+        #100000;    // for a truncated simulation
+        #100000000; // for a full simulation
         $display("Finishing Sim"); //print nice message
         $finish;
     end
