@@ -5,7 +5,7 @@
 // assumes the front and back buffers have been updated to refelect the y position of the current blocks
 // essentially repeats ssd row calculation down all rows and then accumulates the values across all SMAC engines
 
-module calculate_ssd_block (
+module calculate_ssd_block_old (
     input wire clk_in,
     input wire rst_in,
     // do we need a valid_in signal? so know when to reset stuff?
@@ -74,7 +74,7 @@ module calculate_ssd_block (
     generate
         genvar i;
         for (i=0; i<6; i++) begin
-            mac_engine inst (
+            mac_engine_8bit inst (
                 .clk_in(clk_in),
                 .rst_in(rst_smac[i]),
                 .left_pixel(left_smac_input[i]),

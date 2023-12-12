@@ -22,20 +22,23 @@ module mac_engine_48bit (
     assign pixel_5_diff = left_row[7:0]   > right_row[7:0] ? left_row[7:0] - right_row[7:0] : right_row[7:0] - left_row[7:0];
 
     // end
-    always_ff @ (posedge clk_in) begin
-        if (rst_in) begin
-            accumulator <= 0; // is this a good default?
-        end else begin
-            if (valid_in) begin
-                // we assume left pixel and right pixel are always > 0
-                // we have 6 pixels 
-                accumulator <= pixel_0_diff*pixel_0_diff + pixel_1_diff*pixel_1_diff + pixel_2_diff*pixel_2_diff +
+    // always_ff @ (posedge clk_in) begin
+    //     if (rst_in) begin
+    //         accumulator <= 0; // is this a good default?
+    //     end else begin
+    //         if (valid_in) begin
+    //             // we assume left pixel and right pixel are always > 0
+    //             // we have 6 pixels 
+    //             accumulator <= pixel_0_diff*pixel_0_diff + pixel_1_diff*pixel_1_diff + pixel_2_diff*pixel_2_diff +
+    //                            pixel_3_diff*pixel_3_diff + pixel_4_diff*pixel_4_diff + pixel_5_diff*pixel_5_diff;
+
+    //         end
+
+    //     end
+    // end
+
+    assign accumulator = pixel_0_diff*pixel_0_diff + pixel_1_diff*pixel_1_diff + pixel_2_diff*pixel_2_diff +
                                pixel_3_diff*pixel_3_diff + pixel_4_diff*pixel_4_diff + pixel_5_diff*pixel_5_diff;
-
-            end
-
-        end
-    end
 
 
 

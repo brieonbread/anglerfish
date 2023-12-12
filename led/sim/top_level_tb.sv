@@ -6,14 +6,13 @@
 module top_level_tb();
     logic clk_in;
     logic [3:0] btn;
-    logic [2:0] rgb0;
-    logic [2:0] rgb1;
+    logic [15:0] sw;
     logic [7:0] pmoda;
+    
 
     top_level uut (.clk_100mhz(clk_in),
                    .btn(btn),
-                   .rgb0(rgb0),
-                   .rgb1(rgb1),
+                   .sw(sw),
                    .pmoda(pmoda));
 
     always begin
@@ -30,15 +29,13 @@ module top_level_tb();
         btn[0] = 1;
         #10;
         btn[0] = 0;
-        #1500000;
-        btn[0] = 1;
         #10;
-        btn[0] = 0;
-        #1500000;
-        btn[0] = 1;
+        sw[15:0] = 16'b0000_0000_0000_0001;
+        btn[1] = 1;
         #10;
-        btn[0] = 0;
-        #1500000;
+        btn[1] = 0;
+        #300000000;
+        
 
         $display("Simulation finished");
         $finish;

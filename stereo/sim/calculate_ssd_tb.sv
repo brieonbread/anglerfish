@@ -1,8 +1,12 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
+// IVERILOG:
 // iverilog -g2012 -o sim/sim.out sim/calculate_ssd_tb.sv hdl/mac_engine_48bit.sv hdl/calculate_ssd.sv
 
+// VIVADO:
+// Make sure to change build.py and make sure change name of the tb file in 2 places!
+// ./remote/r.py build.py xsim_run.tcl hdl/* sim/calculate_ssd_tb.sv obj
 module calculate_ssd_tb;
     logic clk_in;
     logic rst_in;
@@ -13,10 +17,10 @@ module calculate_ssd_tb;
     logic [$clog2(320):0] right_current_y;
     logic [$clog2(240):0] left_block_idx;
     logic [$clog2(240):0] right_block_idx;
-    logic [47:0] left_front_buffer  [5:0];
-    logic [47:0] left_back_buffer   [5:0];
-    logic [47:0] right_front_buffer [5:0];
-    logic [47:0] right_back_buffer  [5:0];
+    logic [5:0][47:0] left_front_buffer;
+    logic [5:0][47:0] left_back_buffer;
+    logic [5:0][47:0] right_front_buffer;
+    logic [5:0][47:0] right_back_buffer;
     logic valid_out;
     logic [$clog2(255*255*6*6):0] ssd_out;
 

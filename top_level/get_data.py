@@ -2,9 +2,10 @@ import serial
 from PIL import Image
 
 BAUD_RATE = 3000000
-NUM_BYTES = 3 * 320 * 240
+# NUM_BYTES = 8 * 320 * 240
+NUM_BYTES = 2
 
-ser = serial.Serial('/dev/ttyUSB1', BAUD_RATE)
+ser = serial.Serial('/dev/cu.usbserial-88742923013B1', BAUD_RATE)
 from_fpga = ser.read(NUM_BYTES)
 
 print(from_fpga)
@@ -25,5 +26,5 @@ def print_out_binary(data, entries=1):
 # you can handle the data other ways too, manipulating data with other functions
 
 # example with image BRAM
-handle_as_rgb_image(from_fpga, 320, 240)
+# handle_as_rgb_image(from_fpga, 320, 240)
 print_out_binary(from_fpga, 320*240)

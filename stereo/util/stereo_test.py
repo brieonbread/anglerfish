@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 # --------------
 # Read in images
 # --------------
-left_fp = '/Users/brianli/Desktop/stereo_test_images/lab_full_left.jpg'
-right_fp = '/Users/brianli/Desktop/stereo_test_images/lab_full_right.jpg'
+left_fp = '/Users/brianli/Desktop/stereo_test_images/chair_left.jpg'
+right_fp = '/Users/brianli/Desktop/stereo_test_images/chair_right.jpg'
 left_img = cv2.imread(left_fp, 0)
 # plt.imshow(left_img, cmap='gray')
 # plt.show()
@@ -298,7 +298,14 @@ print(right_img.shape)
 # cv2.imshow("Disparity", disparity_map)
 # cv2.imwrite("/Users/brianli/Desktop/stereo_test_images/disparity_sad_image_1.png", disparity_map)
 
+plt.imshow(left_img, cmap='plasma')
+plt.title("Block Size = {}, Max Offset = {}".format(block_size, max_offset))
+plt.colorbar()
+plt.show()
+
+
 plt.imshow(disparity_map, cmap='plasma')
 plt.title("Block Size = {}, Max Offset = {}".format(block_size, max_offset))
 plt.colorbar()
 plt.show()
+

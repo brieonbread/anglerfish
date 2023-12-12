@@ -118,6 +118,31 @@ module update_buffers_tb;
 
         write_to_front = 1;
         
+        // Test Case 1: write to front buffer
+        
+        left_current_x  = 1;
+        right_current_x = 0;
+        left_current_y  = 0;
+        right_current_y = 0;
+        valid_in = 1;
+        # 10;
+        valid_in = 0;
+
+        write_to_front = 1;
+        
+
+        // Test Case 1: write to front buffer
+        
+        left_current_x  = 0;
+        right_current_x = 0;
+        left_current_y  = 0;
+        right_current_y = 0;
+        valid_in = 1;
+        # 10;
+        valid_in = 0;
+
+        write_to_front = 1;
+        
 
         # 5000;
 
