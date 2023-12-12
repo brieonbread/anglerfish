@@ -16,8 +16,11 @@
  *   reset/stop running when this signal is low
  *   - req_index_out = index at which this module fetches data from your BRAM,
  *   should be tied to the request address of your BRAM's output port
- *   - uart_tx = UART transmit output (connected to FPGA's top level UART
+ *   - uart_txd = UART transmit output (connected to FPGA's top level UART
  *   transmit wire)
+ *
+ * Note that you will also need a uart_tx module (can be found in any
+ * generated manta.sv files).
  */
 
 // copy the below module template if you'd like
@@ -30,7 +33,7 @@
 //                 .data_in(),
 //                 .send_data_in(),
 //                 .req_index_out(),
-//                 .uart_tx() );
+//                 .uart_txd() );
 
 
 `timescale 1ns / 1ps
@@ -45,7 +48,7 @@ module bram_readout #( parameter BRAM_WIDTH=24, // MUST BE MULTIPLE OF 8
                        input wire [BRAM_WIDTH-1:0] data_in, // tie this to BRAM data out (make sure read enabled)
                        input wire send_data_in, 
                        output logic [$clog2(BRAM_DEPTH)-1:0] req_index_out,
-                       output logic uart_tx
+                       output logic uart_txd
                      );
 
   localparam CLK_PER_BAUD = CLK_FREQ / BAUD_RATE;
@@ -64,7 +67,7 @@ module bram_readout #( parameter BRAM_WIDTH=24, // MUST BE MULTIPLE OF 8
             .data_i(current_byte),
             .start_i(uart_start),
             .done_o(uart_done),
-            .tx(uart_tx)
+            .tx(uart_txd)
           );
 
   always_ff @(posedge clk_in) begin
