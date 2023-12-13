@@ -27,6 +27,7 @@ module top_level(
   output logic [2:0] rgb1,
   output logic [7:0] pmoda,
   output logic [15:0] led,
+  input wire uart_rxd,
   output logic uart_txd
   );
 
@@ -425,13 +426,13 @@ xilinx_single_port_ram_read_first #(
     .RAM_PERFORMANCE("HIGH_PERFORMANCE")
     )
     ssd_result (
-    .addra((sw[0] == 1) ? readout_addr:ssd_addr), //pixels are stored using this math, assumes 0 indexing
+    .addra((sw[0])? readout_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea(ssd_wea),
+    .wea((sw[0])? 1'b0 : ssd_wea),
     .dina(ssd_din),
     .ena(1'b1),
     .regcea(1'b1),
-    .rsta(sys_rst),
+    .rsta(1'b0),
     .douta(ssd_dout)
   );
 
@@ -445,7 +446,14 @@ xilinx_single_port_ram_read_first #(
                 .send_data_in(sw[0]),
                 .req_index_out(readout_addr),
                 .uart_txd(uart_txd) );
-    
+  
+  logic [16:0] test_val;
+  assign test_val = (sw[0])? readout_addr : ssd_addr;
+
+  assign led[15:8] = ssd_dout;
+  assign led[1] = uart_txd;
+
+ 
 endmodule
 
 
