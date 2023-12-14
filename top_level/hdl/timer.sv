@@ -10,9 +10,9 @@ module stopwatch #(
                     output logic [3:0] minutes, // max is 15 min
                     output logic [5:0] seconds, // 60 seconds in 1 min
                     output logic [6:0] hundredths // 100 hundredths in a second
-                  )
+                  );
 
-  logic [$clog(FREQUENCY/100):0] counter; // count on each clock cycle for next hundredth of second
+  logic [$clog2(FREQUENCY/100):0] counter; // count on each clock cycle for next hundredth of second
   always_ff @(posedge clk_in) begin
     if (rst_in) begin
       counter <= 0;

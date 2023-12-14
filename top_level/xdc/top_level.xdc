@@ -131,7 +131,7 @@ set_property -dict { PACKAGE_PIN R14   IOSTANDARD TMDS_33  } [get_ports {hdmi_tx
 #SERVO
 #set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS33}  [ get_ports "servo[0]" ]
 #set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS33}  [ get_ports "servo[1]" ]
-#set_property -dict {PACKAGE_PIN N14 IOSTANDARD LVCMOS33}  [ get_ports "servo[2]" ]
+set_property -dict {PACKAGE_PIN N14 IOSTANDARD LVCMOS33}  [ get_ports "ir_rx" ]
 set_property -dict {PACKAGE_PIN M14 IOSTANDARD LVCMOS33}  [ get_ports "gpio[5]" ] 
 
 # uart pins for working with manta:

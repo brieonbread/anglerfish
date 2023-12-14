@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Nov 30 20:44:32 2023
+| Date         : Thu Dec 14 02:24:54 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_place_timing.rpt
 | Design       : top_level
@@ -12,20 +12,20 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             3.234ns  (required time - arrival time)
-  Source:                 cams/addra1/CLK
+Slack (MET) :             4.253ns  (required time - arrival time)
+  Source:                 left/data_in1/CLK
                             (rising edge-triggered cell DSP48E1 clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
-  Destination:            cams/frame_buffer/BRAM_reg_0_1/ENARDEN
-                            (rising edge-triggered cell RAMB36E1 clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
+  Destination:            left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/D
+                            (rising edge-triggered cell SRL16E clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
   Path Group:             clk_pixel_clk_wiz_0
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            13.468ns  (clk_pixel_clk_wiz_0 rise@13.468ns - clk_pixel_clk_wiz_0 rise@0.000ns)
-  Data Path Delay:        9.554ns  (logic 4.257ns (44.557%)  route 5.297ns (55.443%))
-  Logic Levels:           2  (LUT2=1 LUT3=1)
-  Clock Path Skew:        -0.069ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    -1.567ns = ( 11.901 - 13.468 ) 
-    Source Clock Delay      (SCD):    -0.945ns
-    Clock Pessimism Removal (CPR):    0.553ns
+  Data Path Delay:        8.874ns  (logic 4.855ns (54.710%)  route 4.019ns (45.290%))
+  Logic Levels:           5  (LUT5=1 LUT6=4)
+  Clock Path Skew:        -0.129ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.624ns = ( 11.844 - 13.468 ) 
+    Source Clock Delay      (SCD):    -0.942ns
+    Clock Pessimism Removal (CPR):    0.554ns
   Clock Uncertainty:      0.168ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Discrete Jitter          (DJ):    0.329ns
@@ -36,47 +36,53 @@ Slack (MET) :             3.234ns  (required time - arrival time)
                          (clock clk_pixel_clk_wiz_0 rise edge)
                                                       0.000     0.000 r  
     N15                                               0.000     0.000 r  clk_100mhz (IN)
-                         net (fo=0)                   0.000     0.000    cams/mhdmicw/clk_100mhz
-    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  cams/mhdmicw/clkin1_ibufg/O
-                         net (fo=1, estimated)        1.233     2.673    cams/mhdmicw/clk_ref_clk_wiz_0
+                         net (fo=0)                   0.000     0.000    mhdmicw/clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  mhdmicw/clkin1_ibufg/O
+                         net (fo=1, estimated)        1.233     2.673    mhdmicw/clk_ref_clk_wiz_0
     MMCME2_ADV_X0Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
-                                                     -7.025    -4.352 r  cams/mhdmicw/mmcm_adv_inst/CLKOUT0
-                         net (fo=1, estimated)        1.666    -2.686    cams/mhdmicw/clk_pixel_clk_wiz_0
-    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096    -2.590 r  cams/mhdmicw/clkout1_buf/O
-                         net (fo=347, estimated)      1.645    -0.945    cams/clk_pixel
-    DSP48_X1Y10          DSP48E1                                      r  cams/addra1/CLK
+                                                     -7.025    -4.352 r  mhdmicw/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, estimated)        1.666    -2.686    mhdmicw/clk_pixel_clk_wiz_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096    -2.590 r  mhdmicw/clkout1_buf/O
+                         net (fo=338, estimated)      1.648    -0.942    left/clk_pixel
+    DSP48_X1Y20          DSP48E1                                      r  left/data_in1/CLK
   -------------------------------------------------------------------    -------------------
-    DSP48_X1Y10          DSP48E1 (Prop_dsp48e1_CLK_P[15])
-                                                      4.009     3.064 f  cams/addra1/P[15]
-                         net (fo=19, estimated)       2.315     5.379    cams/addra1_n_90
-    SLICE_X8Y28          LUT2 (Prop_lut2_I0_O)        0.124     5.503 f  cams/BRAM_reg_0_0_i_3/O
-                         net (fo=15, estimated)       2.158     7.661    cams/frame_buffer/ADDRARDADDR[15]
-    SLICE_X48Y12         LUT3 (Prop_lut3_I2_O)        0.124     7.785 r  cams/frame_buffer/BRAM_reg_0_1_ENARDEN_cooolgate_en_gate_37/O
-                         net (fo=1, estimated)        0.824     8.609    cams/frame_buffer/BRAM_reg_0_1_ENARDEN_cooolgate_en_sig_20
-    RAMB36_X1Y0          RAMB36E1                                     r  cams/frame_buffer/BRAM_reg_0_1/ENARDEN
+    DSP48_X1Y20          DSP48E1 (Prop_dsp48e1_CLK_P[15])
+                                                      4.009     3.067 r  left/data_in1/P[15]
+                         net (fo=4, estimated)        1.175     4.242    left/data_in1_n_90
+    SLICE_X54Y53         LUT5 (Prop_lut5_I3_O)        0.146     4.388 r  left/buffer_reg[47]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
+                         net (fo=4, estimated)        0.529     4.917    left/data_in0[13]
+    SLICE_X54Y53         LUT6 (Prop_lut6_I5_O)        0.328     5.245 r  left/buffer_reg[44]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
+                         net (fo=3, estimated)        0.465     5.710    left/data_in0[10]
+    SLICE_X53Y52         LUT6 (Prop_lut6_I5_O)        0.124     5.834 r  left/buffer_reg[41]_srl2___left_addr_pipe_buffer_reg_r_0_i_2/O
+                         net (fo=4, estimated)        0.741     6.575    left/data_in0[7]
+    SLICE_X54Y51         LUT6 (Prop_lut6_I0_O)        0.124     6.699 r  left/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0_i_2/O
+                         net (fo=1, estimated)        0.615     7.314    left/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0_i_2_n_0
+    SLICE_X54Y51         LUT6 (Prop_lut6_I1_O)        0.124     7.438 r  left/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
+                         net (fo=1, estimated)        0.494     7.932    left/addr_pipe/data_in0[0]
+    SLICE_X52Y50         SRL16E                                       r  left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/D
   -------------------------------------------------------------------    -------------------
 
                          (clock clk_pixel_clk_wiz_0 rise edge)
                                                      13.468    13.468 r  
     N15                                               0.000    13.468 r  clk_100mhz (IN)
-                         net (fo=0)                   0.000    13.468    cams/mhdmicw/clk_100mhz
-    N15                  IBUF (Prop_ibuf_I_O)         1.370    14.838 r  cams/mhdmicw/clkin1_ibufg/O
-                         net (fo=1, estimated)        1.171    16.010    cams/mhdmicw/clk_ref_clk_wiz_0
+                         net (fo=0)                   0.000    13.468    mhdmicw/clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.370    14.838 r  mhdmicw/clkin1_ibufg/O
+                         net (fo=1, estimated)        1.171    16.010    mhdmicw/clk_ref_clk_wiz_0
     MMCME2_ADV_X0Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
-                                                     -7.279     8.731 r  cams/mhdmicw/mmcm_adv_inst/CLKOUT0
-                         net (fo=1, estimated)        1.583    10.314    cams/mhdmicw/clk_pixel_clk_wiz_0
-    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    10.405 r  cams/mhdmicw/clkout1_buf/O
-                         net (fo=347, estimated)      1.496    11.901    cams/frame_buffer/clk_pixel
-    RAMB36_X1Y0          RAMB36E1                                     r  cams/frame_buffer/BRAM_reg_0_1/CLKARDCLK
-                         clock pessimism              0.553    12.454    
-                         clock uncertainty           -0.168    12.286    
-    RAMB36_X1Y0          RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ENARDEN)
-                                                     -0.443    11.843    cams/frame_buffer/BRAM_reg_0_1
+                                                     -7.279     8.731 r  mhdmicw/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, estimated)        1.583    10.314    mhdmicw/clk_pixel_clk_wiz_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    10.405 r  mhdmicw/clkout1_buf/O
+                         net (fo=338, estimated)      1.439    11.844    left/addr_pipe/clk_pixel
+    SLICE_X52Y50         SRL16E                                       r  left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/CLK
+                         clock pessimism              0.554    12.397    
+                         clock uncertainty           -0.168    12.229    
+    SLICE_X52Y50         SRL16E (Setup_srl16e_CLK_D)
+                                                     -0.044    12.185    left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0
   -------------------------------------------------------------------
-                         required time                         11.843    
-                         arrival time                          -8.609    
+                         required time                         12.185    
+                         arrival time                          -7.932    
   -------------------------------------------------------------------
-                         slack                                  3.234    
+                         slack                                  4.253    
 
 
 
