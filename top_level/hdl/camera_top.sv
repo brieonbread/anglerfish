@@ -9,7 +9,10 @@ module camera_top(
   output logic camclk,
   output logic [16:0] addr_out,
   output logic wea_out,
-  output logic [47:0] greyscale_data_out
+  output logic [47:0] greyscale_data_out,
+  output logic [23:0] rgb_out,
+  output logic [10:0] h_out,
+  output logic [9:0] v_out
   );
 
   //Signals related to driving the video pipeline
@@ -157,6 +160,30 @@ module camera_top(
     .rst_in(rst_in),
     .data_in((hcount_rec + (320 * vcount_rec)) / 6),
     .data_out(y_addr) );
+
+  pipelining #(
+    .DEPTH(3),
+    .DATA_WIDTH(24) ) rgb_pipe (
+    .clk_in(clk_pixel),
+    .rst_in(rst_in),
+    .data_in({fb_red, fb_green, fb_blue}),
+    .data_out(rgb_out) );
+
+  pipelining #(
+    .DEPTH(3),
+    .DATA_WIDTH(11) ) h_pipe (
+    .clk_in(clk_pixel),
+    .rst_in(rst_in),
+    .data_in(hcount_rec),
+    .data_out(h_out) );
+  
+  pipelining #(
+    .DEPTH(3),
+    .DATA_WIDTH(10) ) v_pipe (
+    .clk_in(clk_pixel),
+    .rst_in(rst_in),
+    .data_in(vcount_rec)),
+    .data_out(v_out) );
 
 endmodule
 
