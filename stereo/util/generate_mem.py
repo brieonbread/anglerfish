@@ -6,14 +6,14 @@ import binascii
 # --------------
 # Read in images
 # --------------
-# left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_left.png'
-# right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_right.png'
+left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_left.png'
+right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_right.png'
 
 # left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/LEFT_TEST_PATTERN.png'
 # right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/RIGHT_TEST_PATTERN.png'
 
-left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_left.jpg'
-right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_right.jpg'
+# left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_left.jpg'
+# right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_right.jpg'
 
 left_img = cv2.imread(left_fp, 0)
 right_img = cv2.imread(right_fp, 0)

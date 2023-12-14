@@ -45,7 +45,7 @@ module top_level_tb;
 
         clk_in = 0;
         btn[0] = 0;
-
+        sw[0] = 0;
         #10;
         btn[0] = 1;
         #10;
@@ -54,19 +54,25 @@ module top_level_tb;
         #10;
         btn[1] = 0;
 
-        #100000;
-        // #3000000;    // for a truncated simulation
+        // #10000;
+        #1000000;    // for a truncated simulation
         // #10000000;    // for a medium simulation
         // #300000000; 
-        
-        #10;
-        btn[0] = 1;
-        #10;
-        btn[0] = 1;
-        sw[0] = 0;
-        #10;
         sw[0] = 1;
-        #300000;
+        # 10;
+        #1000
+        #10;
+        btn[0] = 1;
+        #10;
+        btn[0] = 0;
+        #10;
+        
+
+        // #10;
+        // sw[0] = 0;
+        // #10;
+        // sw[0] = 1;
+        // #300000;
 
         $display("Finishing Sim"); //print nice message
         $finish;

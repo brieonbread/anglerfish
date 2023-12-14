@@ -52,7 +52,11 @@ module top_level(
   logic [$clog2(320*40)-1:0] left_address;
   logic [$clog2(320*40)-1:0] right_address;
 
-  // logics associated with ssd result BRAM, we want to store offsets not ssd values
+  // logics associated with ssd result BRAM
+  // CHANGE ME
+  // logic [$clog2(255*255*6*6):0] ssd_din; 
+  // logic [$clog2(255*255*6*6):0] ssd_dout;
+
   logic [7:0] ssd_din; // assume max offset is 240
   logic [7:0] ssd_dout;
 
@@ -61,6 +65,11 @@ module top_level(
   logic [$clog2(320*240)-1:0] readout_addr;
 
   assign led[0] = |ssd_dout; 
+
+
+
+  // assign left_address  = (40*current_left_y  + current_left_x);
+  // assign right_address = (40*current_right_y + current_right_x);
   
   // logics asociated with temp buffers
   logic [5:0][47:0] left_front_buffer;
@@ -270,20 +279,22 @@ module top_level(
           if (update_buffer_valid_out) begin
             // update_buffer_valid_in <= 0;
             top_state <= CALCULATE;
-            calculate_ssd_valid_in <= 1;
           end
+          // top_state <= UPDATE_CENTERS; // NOTE: for debugging purposes only
+
 
         end
         CALCULATE: begin
-          calculate_ssd_valid_in <= 0;
-          if (calculate_ssd_valid_out) begin
+          calculate_ssd_valid_in <= 1;
+          if (calculate_ssd_valid_in) begin
+            calculate_ssd_valid_in <= 0;
             top_state <= UPDATE_DISPARITY;
           end
           
         end
         UPDATE_DISPARITY: begin
           if (ssd_out <= min_ssd_sofar) begin
-            min_ssd_sofar    <= ssd_out; // this might be sus... what if ssd_out changes on next cycle?
+            min_ssd_sofar <= ssd_out; // this might be sus... what if ssd_out changes on next cycle?
             min_offset_sofar <= current_left_x - current_right_x; // should be a non negative number
           end
           top_state <= SAVE;

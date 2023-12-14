@@ -1,10 +1,3 @@
-// Iterate through left/right center pixels
-  // Iterate thorugh offsets
-    // For a given center pixel, determine if we need to update buffers by reading from BRAMs
-    // Assuming that buffers are updated, run ssd calculation on the buffers
-  // Save this and then rerun process with a different offset, keep the smaller of the two
-// When all offsets have been calculated, updates the ssd results BRAM
-
 `timescale 1ns / 1ps
 `default_nettype none
 
@@ -17,33 +10,17 @@
 
 parameter BLOCK_SIZE = 6; // NOTE: the block size influences basically every aspect of this module
 
-module top_level(
+// Use this module for integration!!
+
+module stereo_match(
   input wire clk_100mhz,
-  input wire [3:0] btn,
-  input wire [15:0] sw,
-  // input wire new_frame_in,   // flag tells us when new frame is ready for processing
-  // output logic new_frame_out, // flag tells us when frame is done processing
-  output logic [2:0] rgb0,
-  output logic [2:0] rgb1,
-  output logic [7:0] pmoda,
-  output logic [15:0] led,
-  input wire uart_rxd,
-  output logic uart_txd
+  input sys_rst,
+  input wire new_frame_in,   // flag tells us when new frame is ready for processing
+  input [7:0] readout_addr,  // address to look up in SSD results BRAM
+  output [7:0] ssd_dout,     // output from SSD results BRAM
+  output logic new_frame_out, // flag tells us when frame is done processing
   );
 
-  // have btnd control system reset 
-  logic sys_rst;
-  assign sys_rst = btn[0];
-
-  // 
-  logic new_frame_in;
-  assign new_frame_in = btn[1]; // TODO: add button debouncer
-  logic new_frame_out;
-
-  // assign values to all ports
-  // assign rgb0 = 1;
-  assign rgb1 = new_frame_out ? 1 : 0;
-  assign pmoda = 8'b0000_0000;
 
   // logics associated with left/right BRAMs
   logic [47:0] left_dout;
@@ -54,7 +31,7 @@ module top_level(
 
   // logics associated with ssd result BRAM, we want to store offsets not ssd values
   logic [7:0] ssd_din; // assume max offset is 240
-  logic [7:0] ssd_dout;
+  logic reading; // when high we are in reading mode, if low we are still writing
 
   logic ssd_wea;
   logic [$clog2(320*240)-1:0] ssd_addr;
@@ -108,7 +85,6 @@ module top_level(
   stereo_states top_state;
 
   logic [2:0] SAVE_counter;
-
 
   // logics associated with top level indexing/coords
   logic [$clog2(320):0] current_left_y;
@@ -188,6 +164,8 @@ module top_level(
           new_frame_out           <= 0;
           calculate_ssd_valid_in  <= 0;
 
+          reading <= 0;
+
 
         end
         UPDATE_CENTERS: begin
@@ -196,6 +174,7 @@ module top_level(
             // terminate, we are done with this frame
             top_state <= IDLE;
             new_frame_out <= 1;
+            reading <= 1; // will be high until new frame comes in
             
           end else if (current_left_x == left_x_max) begin
             // we have reached end of row, start a new row
@@ -411,9 +390,9 @@ xilinx_single_port_ram_read_first #(
     .RAM_PERFORMANCE("HIGH_PERFORMANCE")
     )
     ssd_result (
-    .addra((sw[0])? readout_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
+    .addra((reading)? readout_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea((sw[0])? 1'b0 : ssd_wea),
+    .wea((reading)? 1'b0 : ssd_wea),
     .dina(ssd_din),
     .ena(1'b1),
     .regcea(1'b1),
@@ -421,22 +400,6 @@ xilinx_single_port_ram_read_first #(
     .douta(ssd_dout)
   );
 
-  bram_readout #(.BRAM_WIDTH(8),
-                .BRAM_DEPTH(320*240),
-                .BAUD_RATE(3000000),
-                .CLK_FREQ(100000000))
-                inst_readout
-              ( .clk_in(clk_100mhz),
-                .data_in(ssd_dout),
-                .send_data_in(sw[0]),
-                .req_index_out(readout_addr),
-                .uart_txd(uart_txd) );
-  
-  logic [16:0] test_val;
-  assign test_val = (sw[0])? readout_addr : ssd_addr;
-
-  assign led[15:8] = ssd_dout;
-  assign led[1] = uart_txd;
 
  
 endmodule

@@ -29,6 +29,7 @@ module calculate_ssd_block (
     logic [5:0][47:0] right_smac_input;
     logic [5:0] valid_in_smac;
     logic [5:0][$clog2(255*255*6):0] ssd_by_col;
+    logic [5:0] valid_out_smac;
 
     logic [$clog2(6):0] left_diff;
     logic [$clog2(6):0] right_diff;
@@ -36,13 +37,20 @@ module calculate_ssd_block (
     assign left_diff = left_current_x-left_block_idx;
     assign right_diff = right_current_x-right_block_idx;
 
-    assign ssd_out = ssd_by_col[0] + ssd_by_col[1] + ssd_by_col[2] + ssd_by_col[3] + ssd_by_col[4] + ssd_by_col[5];
+    logic [2:0] ssd_counter;
+
+
+
+	//register the final output, may generate valid_out signal to send back to the main FSM to pick up the final output.
+    // assign ssd_out = (ssd_by_col[0] + ssd_by_col[1]) + (ssd_by_col[2] + ssd_by_col[3]) + (ssd_by_col[4] + ssd_by_col[5]);
+
     always_ff @ (posedge clk_in) begin
         
         if (rst_in) begin
             // ssd_out <= 0;
         end else begin
-            // ssd_out <= ssd_by_col[0] + ssd_by_col[1] + ssd_by_col[2] + ssd_by_col[3] + ssd_by_col[4] + ssd_by_col[5];
+            ssd_out <= ssd_by_col[0] + ssd_by_col[1] + ssd_by_col[2] + ssd_by_col[3] + ssd_by_col[4] + ssd_by_col[5];
+
             // input into SMAC engines
             if (valid_in) begin
                 valid_in_smac <= 6'b11_1111;
@@ -72,6 +80,13 @@ module calculate_ssd_block (
             end else begin
                 valid_in_smac <= 6'b00_0000;
             end
+
+            if (&valid_out_smac == 1) begin // assumes that the smac engines finish at the same time!
+                valid_out <= 1;
+            end else begin
+                valid_out <= 0;
+            end
+
         end
     end
 
@@ -86,7 +101,8 @@ module calculate_ssd_block (
                 .left_row(left_smac_input[a]),
                 .right_row(right_smac_input[a]),
                 .valid_in(valid_in_smac[a]),
-                .accumulator(ssd_by_col[a])
+                .accumulator(ssd_by_col[a]),
+                .valid_out(valid_out_smac[a])
             );
         end
     endgenerate

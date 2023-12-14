@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date             : Tue Dec 12 21:09:19 2023
+| Date             : Thu Dec 14 16:38:35 2023
 | Host             : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command          : report_power -file obj/post_route_power.rpt
 | Design           : top_level
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.189        |
+| Total On-Chip Power (W)  | 0.175        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.114        |
+| Dynamic (W)              | 0.100        |
 | Device Static (W)        | 0.075        |
 | Effective TJA (C/W)      | 4.9          |
 | Max Ambient (C)          | 84.1         |
@@ -52,19 +52,19 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.007 |        3 |       --- |             --- |
-| Slice Logic    |     0.031 |     8085 |       --- |             --- |
-|   LUT as Logic |     0.027 |     4557 |     32600 |           13.98 |
+| Clocks         |     0.013 |        3 |       --- |             --- |
+| Slice Logic    |     0.022 |     9104 |       --- |             --- |
+|   LUT as Logic |     0.019 |     4271 |     32600 |           13.10 |
 |   CARRY4       |     0.003 |      649 |      8150 |            7.96 |
-|   Register     |    <0.001 |     1856 |     65200 |            2.85 |
+|   Register     |    <0.001 |     2863 |     65200 |            4.39 |
 |   F7/F8 Muxes  |    <0.001 |        1 |     32600 |           <0.01 |
-|   Others       |     0.000 |       23 |       --- |             --- |
-| Signals        |     0.036 |     6610 |       --- |             --- |
-| Block RAM      |     0.038 |       72 |        75 |           96.00 |
+|   Others       |     0.000 |       35 |       --- |             --- |
+| Signals        |     0.021 |     6646 |       --- |             --- |
+| Block RAM      |     0.039 |       72 |        75 |           96.00 |
 | DSPs           |     0.001 |        5 |       120 |            4.17 |
-| I/O            |    <0.001 |       35 |       210 |           16.67 |
+| I/O            |     0.004 |       35 |       210 |           16.67 |
 | Static Power   |     0.075 |          |           |                 |
-| Total          |     0.189 |          |           |                 |
+| Total          |     0.175 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,9 +74,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.122 |       0.110 |      0.011 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.104 |       0.093 |      0.011 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.002 |       0.001 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -138,15 +138,21 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+----------------------+-----------+
-| Name                 | Power (W) |
-+----------------------+-----------+
-| top_level            |     0.114 |
-|   inst_ssd           |     0.062 |
-|   inst_update        |     0.010 |
-|   left_frame_buffer  |     0.011 |
-|   right_frame_buffer |     0.011 |
-|   ssd_result         |     0.018 |
-+----------------------+-----------+
++-----------------------+-----------+
+| Name                  | Power (W) |
++-----------------------+-----------+
+| top_level             |     0.100 |
+|   inst_ssd            |     0.043 |
+|     smac_loop[0].inst |     0.006 |
+|     smac_loop[1].inst |     0.006 |
+|     smac_loop[2].inst |     0.007 |
+|     smac_loop[3].inst |     0.006 |
+|     smac_loop[4].inst |     0.006 |
+|     smac_loop[5].inst |     0.006 |
+|   inst_update         |     0.010 |
+|   left_frame_buffer   |     0.011 |
+|   right_frame_buffer  |     0.011 |
+|   ssd_result          |     0.018 |
++-----------------------+-----------+
 
 

@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-// iverilog -g2012 -o sim/sim.out sim/mac_engine_tb.sv hdl/mac_engine.sv
+// iverilog -g2012 -o sim/sim.out sim/mac_tb_48bit.sv hdl/mac_engine_48bit.sv
 
 module mac_tb_48bit;
     logic clk_in;

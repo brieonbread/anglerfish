@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 def compute_sad(left_rectified, right_rectified, left_pixel, right_pixel, block_size):
     """
@@ -50,6 +51,7 @@ def sad_disparity(left_rectified, right_rectified, block_size=0, max_offset=0):
 
     
     for r in range(left_min_y, left_max_y):
+        print("r ", r)
         # if r == 1:
         #     break
         for c in range(left_min_x, left_max_x):
@@ -76,8 +78,8 @@ def sad_disparity(left_rectified, right_rectified, block_size=0, max_offset=0):
                         min_sofar = result
                         min_offset = offset # for saving disparity
                         
-            # disparity_map[r,c] = min_offset # for saving disparity
-            disparity_map[r,c] = min_sofar if min_sofar != float('inf') else 0  # for saving ssd
+            disparity_map[r,c] = min_offset # for saving disparity
+            # disparity_map[r,c] = min_sofar if min_sofar != float('inf') else 0  # for saving ssd
 
     return disparity_map
 
@@ -85,14 +87,14 @@ def sad_disparity(left_rectified, right_rectified, block_size=0, max_offset=0):
 # --------------
 # Read in images
 # --------------
-# left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_left.png'
-# right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_right.png'
+left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_left.png'
+right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/bowling_right.png'
 
 # left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/LEFT_TEST_PATTERN.png'
 # right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/RIGHT_TEST_PATTERN.png'
 
-left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_left.jpg'
-right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_right.jpg'
+# left_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_left.jpg'
+# right_fp = '/Users/brianli/Desktop/6.111/stereo_test_images/chair_right.jpg'
 
 
 left_img = cv2.imread(left_fp, 0)
@@ -129,11 +131,15 @@ img2_rectified_downscaled = right_img
 img1_rectified_downscaled = img1_rectified_downscaled.astype(np.uint32)
 img2_rectified_downscaled = img2_rectified_downscaled.astype(np.uint32)
 
-max_offset = 30
-# max_offset = 240
+max_offset = 240
+# max_offset = 30
 block_size = 6
+
+start = time.time()
 disparity_map = sad_disparity(img1_rectified_downscaled , img2_rectified_downscaled, block_size=block_size, max_offset=max_offset)
 # disparity_map = disparity_map * (255/max_offset)
+end = time.time()
+print("Elapsed Time:", end-start)
 
 print(disparity_map[0][120:135])
 bram_block_size = 1
@@ -157,7 +163,7 @@ with open('/Users/brianli/Desktop/6.111/anglerfish/stereo/data/disparity.mem', '
     print("Saved disparity map to disparity.mem")
 
 # Only plot disparity
-plt.imshow(disparity_map, cmap='plasma')
+plt.imshow(disparity_map, cmap='gray')
 plt.title("Block Size = {}, Max Offset = {}".format(block_size, max_offset))
 plt.colorbar()
 plt.show()
