@@ -48,6 +48,11 @@ module calculate_ssd_block (
         
         if (rst_in) begin
             // ssd_out <= 0;
+            valid_in_smac <= '0;
+			for(integer i=0;i<6;i=i+1) begin
+			    left_smac_input[i]  <= '0;
+				right_smac_input[i] <= '0;
+			end
         end else begin
             ssd_out <= ssd_by_col[0] + ssd_by_col[1] + ssd_by_col[2] + ssd_by_col[3] + ssd_by_col[4] + ssd_by_col[5];
 

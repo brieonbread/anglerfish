@@ -144,6 +144,7 @@ module top_level(
   parameter left_y_min = 0;
   parameter left_y_max = 320-BLOCK_SIZE;
   parameter left_x_min = 0;
+  // parameter left_x_min = 20; // DEBUG
   parameter left_x_max = 240-BLOCK_SIZE;
 
   parameter right_y_min = 0;
@@ -158,6 +159,18 @@ module top_level(
       new_frame_out           <= 0;
       update_buffer_valid_in  <= 0;
       calculate_ssd_valid_in  <= 0;
+      
+      current_left_y  <= left_y_min;
+      current_left_x  <= left_x_min;
+      current_right_y <= right_y_min;
+      current_right_x <= right_x_min;
+
+      left_block_idx      <= '0;
+      left_word_idx       <= '0;
+      right_word_idx      <= '0;
+      right_block_idx     <= '0;
+      left_block_counter  <= '0;	  
+      right_block_counter <= '0;
       
       // set ssd_out to be some value
       

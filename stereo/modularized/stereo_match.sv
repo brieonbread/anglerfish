@@ -1,3 +1,10 @@
+// Iterate through left/right center pixels
+  // Iterate thorugh offsets
+    // For a given center pixel, determine if we need to update buffers by reading from BRAMs
+    // Assuming that buffers are updated, run ssd calculation on the buffers
+  // Save this and then rerun process with a different offset, keep the smaller of the two
+// When all offsets have been calculated, updates the ssd results BRAM
+
 `timescale 1ns / 1ps
 `default_nettype none
 
@@ -10,14 +17,18 @@
 
 parameter BLOCK_SIZE = 6; // NOTE: the block size influences basically every aspect of this module
 
-// Use this module for integration!!
-
-module stereo_match(
+module top_level(
   input wire clk_100mhz,
   input sys_rst,
   input wire new_frame_in,   // flag tells us when new frame is ready for processing
-  input [7:0] readout_addr,  // address to look up in SSD results BRAM
-  output [7:0] ssd_dout,     // output from SSD results BRAM
+  input wire writing_image,  // high when writing to left/right frame buffer, low when not
+  input wire [$clog2(320*40)-1:0] external_left_addr, 
+  input wire [$clog2(320*40)-1:0] external_right_addr,
+  input wire [7:0] left_din,
+  input wire [7:0] right_din,
+  input wire reading_ssd,    // high when reading from ssd buffer, low when not
+  input wire [$clog2(320*240)-1:0] external_ssd_addr,
+  output logic [7:0] ssd_dout,
   output logic new_frame_out, // flag tells us when frame is done processing
   );
 
@@ -31,13 +42,11 @@ module stereo_match(
 
   // logics associated with ssd result BRAM, we want to store offsets not ssd values
   logic [7:0] ssd_din; // assume max offset is 240
-  logic reading; // when high we are in reading mode, if low we are still writing
 
   logic ssd_wea;
   logic [$clog2(320*240)-1:0] ssd_addr;
   logic [$clog2(320*240)-1:0] readout_addr;
 
-  assign led[0] = |ssd_dout; 
   
   // logics asociated with temp buffers
   logic [5:0][47:0] left_front_buffer;
@@ -86,6 +95,7 @@ module stereo_match(
 
   logic [2:0] SAVE_counter;
 
+
   // logics associated with top level indexing/coords
   logic [$clog2(320):0] current_left_y;
   logic [$clog2(240):0] current_left_x;
@@ -120,6 +130,7 @@ module stereo_match(
   parameter left_y_min = 0;
   parameter left_y_max = 320-BLOCK_SIZE;
   parameter left_x_min = 0;
+  // parameter left_x_min = 20; // DEBUG
   parameter left_x_max = 240-BLOCK_SIZE;
 
   parameter right_y_min = 0;
@@ -134,6 +145,18 @@ module stereo_match(
       new_frame_out           <= 0;
       update_buffer_valid_in  <= 0;
       calculate_ssd_valid_in  <= 0;
+      
+      current_left_y  <= left_y_min;
+      current_left_x  <= left_x_min;
+      current_right_y <= right_y_min;
+      current_right_x <= right_x_min;
+
+      left_block_idx      <= '0;
+      left_word_idx       <= '0;
+      right_word_idx      <= '0;
+      right_block_idx     <= '0;
+      left_block_counter  <= '0;	  
+      right_block_counter <= '0;
       
       // set ssd_out to be some value
       
@@ -164,8 +187,6 @@ module stereo_match(
           new_frame_out           <= 0;
           calculate_ssd_valid_in  <= 0;
 
-          reading <= 0;
-
 
         end
         UPDATE_CENTERS: begin
@@ -174,7 +195,6 @@ module stereo_match(
             // terminate, we are done with this frame
             top_state <= IDLE;
             new_frame_out <= 1;
-            reading <= 1; // will be high until new frame comes in
             
           end else if (current_left_x == left_x_max) begin
             // we have reached end of row, start a new row
@@ -291,7 +311,8 @@ module stereo_match(
             SAVE_counter <= SAVE_counter + 1;
           end
 
-          rgb0 <= |min_ssd_sofar;
+          
+
 
         end
 
@@ -357,10 +378,10 @@ xilinx_single_port_ram_read_first #(
     .INIT_FILE(`FPATH(left_image.mem))
   )
     left_frame_buffer (
-    .addra(left_address), //pixels are stored using this math, assumes 0 indexing
+    .addra((writing_image) ? external_left_addr : left_address), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea(1'b0),
-    .dina(48'b0),
+    .wea(writing_image),
+    .dina(left_din),
     .ena(1'b1),
     .regcea(1'b1),
     .rsta(sys_rst),
@@ -374,10 +395,10 @@ xilinx_single_port_ram_read_first #(
     .INIT_FILE(`FPATH(right_image.mem))
     )
     right_frame_buffer (
-    .addra(right_address), //pixels are stored using this math, assumes 0 indexing
+    .addra((writing_image) ? external_right_addr : right_address), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea(1'b0),
-    .dina(48'b0),
+    .wea(writing_image),
+    .dina(right_din),
     .ena(1'b1),
     .regcea(1'b1),
     .rsta(sys_rst),
@@ -390,16 +411,17 @@ xilinx_single_port_ram_read_first #(
     .RAM_PERFORMANCE("HIGH_PERFORMANCE")
     )
     ssd_result (
-    .addra((reading)? readout_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
+    .addra((reading)? external_ssd_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea((reading)? 1'b0 : ssd_wea),
+    .wea((reading)? 1'b0 : 1'b1),
     .dina(ssd_din),
     .ena(1'b1),
     .regcea(1'b1),
-    .rsta(1'b0), 
+    .rsta(sys_rst), 
     .douta(ssd_dout)
   );
 
+  
 
  
 endmodule
