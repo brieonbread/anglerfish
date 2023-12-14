@@ -52,6 +52,7 @@ module top_level(
   logic left_wea;
   logic [16:0] left_addr;
   logic [47:0] left_bw;
+  logic [23:0] left_rgb;
   camera_top left (
     .clk_pixel(clk_pixel),
     .rst_in(sys_rst),
@@ -60,7 +61,8 @@ module top_level(
     .camclk(cam_clks[0]),
     .addr_out(left_addr),
     .wea_out(left_wea),
-    .greyscale_data_out(left_bw)
+    .greyscale_data_out(left_bw),
+    .rgb_out(left_rgb) // for swimmer COM?
   );
   
   logic [47:0] left_out;
@@ -72,7 +74,7 @@ module top_level(
     left_image (
       .addra(left_addr), //pixels are stored using this math; "stop storing pixels" when told to freeze
       .clka(clk_pixel),
-      .wea(left_wea && !(sw[1])), // freeze camera if sw[1] is high
+      .wea(left_wea),
       .dina(left_bw),
       .ena(1'b1),
       .regcea(1'b1),
@@ -93,51 +95,65 @@ module top_level(
                   .BAUD_RATE(2970000),
                   .CLK_FREQ(74250000) )
                 ( .clk_in(clk_pixel),
-                  .data_in(left_out),
+                  .data_in((sw[1])? right_out : left_out),
                   .send_data_in(sw[0]),
-                  .req_index_out(left_addr_out),
+                  .req_index_out((sw[1])? right_addr_out : left_addr_out),
                   .uart_txd(uart_txd) );
 
   //right camera and BRAM
-  //logic right_wea;
-  //logic [16:0] right_addr;
-  //logic [7:0] right_bw;
-  //camera_top right (
-  //  .clk_pixel(clk_pixel),
-  //  .rst_in(sys_rst),
-  //  .data_in(pmodb),
-  //  .sync_in(gpio[5:3]),
-  //  .camclk(cam_clks[1]),
-  //  .addr_out(right_addr),
-  //  .wea_out(right_wea),
-  //  .greyscale_data_out(right_bw)
-  //);
-  //
-  //xilinx_true_dual_port_read_first_2_clock_ram #(
-  //    .RAM_WIDTH(48), //each entry in this memory is 16 bits
-  //    .RAM_DEPTH(320*40)) //there are 240*320 or 76800 entries for full frame
-  //  right_image (
-  //    .addra(right_addr), //pixels are stored using this math; "stop storing pixels" when told to freeze
-  //    .clka(clk_pixel),
-  //    .wea(right_wea),
-  //    .dina(right_bw),
-  //    .ena(1'b1),
-  //    .regcea(1'b1),
-  //    .rsta(sys_rst),
-  //    .douta(), //never read from this side
-  //    .addrb(),//transformed lookup pixel; if running manta, edit this line to be pixel that manta requests
-  //    .dinb(16'b0),
-  //    .clkb(clk_pixel),
-  //    .web(1'b0),
-  //    .enb(), // if using manta, edit this line to be always 1'b1
-  //    .rstb(sys_rst),
-  //    .regceb(1'b1),
-  //    .doutb()
-  //);
+  logic right_wea;
+  logic [16:0] right_addr;
+  logic [7:0] right_bw;
+  logic [23:0] right_rgb;
+  camera_top right (
+    .clk_pixel(clk_pixel),
+    .rst_in(sys_rst),
+    .data_in(pmodb),
+    .sync_in(gpio[5:3]),
+    .camclk(cam_clks[1]),
+    .addr_out(right_addr_out),
+    .wea_out(right_wea),
+    .greyscale_data_out(right_bw),
+    .rgb_out(right_rgb)
+  );
+  
+  logic [47:0] right_out;
+  logic [13:0] right_addr_out;
+
+  xilinx_true_dual_port_read_first_2_clock_ram #(
+      .RAM_WIDTH(48), //each entry in this memory is 16 bits
+      .RAM_DEPTH(320*40)) //there are 240*320 or 76800 entries for full frame
+    right_image (
+      .addra(right_addr), //pixels are stored using this math; "stop storing pixels" when told to freeze
+      .clka(clk_pixel),
+      .wea(right_wea),
+      .dina(right_bw),
+      .ena(1'b1),
+      .regcea(1'b1),
+      .rsta(sys_rst),
+      .douta(), //never read from this side
+      .addrb(),//transformed lookup pixel; if running manta, edit this line to be pixel that manta requests
+      .dinb(16'b0),
+      .clkb(clk_pixel),
+      .web(1'b0),
+      .enb(), // if using manta, edit this line to be always 1'b1
+      .rstb(sys_rst),
+      .regceb(1'b1),
+      .doutb()
+  );
 
 
   // SSD
-
+  
+  // grab values that are rotated 90 degrees (rotate image for processing)
+  module rotate (
+    .clk_in(clk_pixel),
+    .rst_in(sys_rst),
+    .hcount_in(), // hcount desired from 
+    .vcount_in(),
+    .valid_addr_in(),
+    .pixel_addr_out(),
+    .valid_addr_out() );
 
 
   // LED
