@@ -26,7 +26,7 @@ module top_level(
   input wire [$clog2(320*40)-1:0] external_right_addr,
   input wire [7:0] left_din,
   input wire [7:0] right_din,
-  input wire reading_ssd,    // high when reading from ssd buffer, low when not
+  input wire reading,    // high when reading from ssd buffer, low when not
   input wire [$clog2(320*240)-1:0] external_ssd_addr,
   output logic [7:0] ssd_dout,
   output logic new_frame_out, // flag tells us when frame is done processing

@@ -231,7 +231,7 @@ module top_level(
   // SSD
   logic default_lookup;
   assign default_lookup = 0;
-  logic [7:0] disparity;
+  
 
   stereo_match(
     .clk_100mhz(clk_pixel), // doesn't actually need to be 100 MHz
@@ -244,7 +244,7 @@ module top_level(
     .left_din(left_bw),
     .right_din(right_bw),
     .reading(get_output),
-    .external_ssd_addr(default_lookup),  // address to look up in SSD results BRAM
+    .external_ssd_addr(readout_addr),  // address to look up in SSD results BRAM
     .ssd_dout(disparity),     // output from SSD results BRAM
     .new_frame_out(frame_done) // flag tells us when frame is done processing
     );
@@ -268,6 +268,20 @@ module top_level(
   //  if (!old_ir_sig && ir_rx) begin
   //  end
   //end
+
+  logic [$clog2(320*240)-1:0] readout_addr;
+  logic [7:0] disparity;
+  
+  bram_readout #(.BRAM_WIDTH(8),
+                .BRAM_DEPTH(320*240),
+                .BAUD_RATE(3000000),
+                .CLK_FREQ(100000000))
+                inst_readout
+              ( .clk_in(clk_100mhz),
+                .data_in(disparity),
+                .send_data_in(sw[1]),
+                .req_index_out(readout_addr),
+                .uart_txd(uart_txd) );
 
 
 endmodule // top_level

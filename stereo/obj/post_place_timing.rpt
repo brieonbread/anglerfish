@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec 14 16:38:13 2023
+| Date         : Fri Dec 15 00:07:01 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_place_timing.rpt
 | Design       : top_level
@@ -12,7 +12,7 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             0.556ns  (required time - arrival time)
+Slack (MET) :             0.523ns  (required time - arrival time)
   Source:                 current_left_y_reg[1]/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Destination:            inst_update/left_address_reg[12]/D
@@ -20,12 +20,12 @@ Slack (MET) :             0.556ns  (required time - arrival time)
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        9.402ns  (logic 6.994ns (74.388%)  route 2.408ns (25.612%))
-  Logic Levels:           9  (CARRY4=6 DSP48E1=1 LUT2=1 LUT5=1)
-  Clock Path Skew:        -0.038ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.788ns = ( 14.788 - 10.000 ) 
-    Source Clock Delay      (SCD):    5.078ns
-    Clock Pessimism Removal (CPR):    0.253ns
+  Data Path Delay:        9.480ns  (logic 7.007ns (73.914%)  route 2.473ns (26.087%))
+  Logic Levels:           8  (CARRY4=5 DSP48E1=1 LUT2=1 LUT5=1)
+  Clock Path Skew:        -0.039ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.772ns = ( 14.772 - 10.000 ) 
+    Source Clock Delay      (SCD):    5.064ns
+    Clock Pessimism Removal (CPR):    0.254ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -40,37 +40,34 @@ Slack (MET) :             0.556ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=2940, estimated)     1.570     5.078    clk_100mhz_IBUF_BUFG
-    SLICE_X11Y42         FDRE                                         r  current_left_y_reg[1]/C
+                         net (fo=2941, estimated)     1.556     5.064    clk_100mhz_IBUF_BUFG
+    SLICE_X13Y51         FDRE                                         r  current_left_y_reg[1]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X11Y42         FDRE (Prop_fdre_C_Q)         0.456     5.534 r  current_left_y_reg[1]/Q
-                         net (fo=9, estimated)        0.757     6.291    inst_update/left_address1_0[1]
-    SLICE_X11Y40         LUT2 (Prop_lut2_I0_O)        0.124     6.415 r  inst_update/left_address0_i_16/O
-                         net (fo=1, routed)           0.000     6.415    inst_update/left_address0_i_16_n_0
-    SLICE_X11Y40         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550     6.965 r  inst_update/left_address0_i_4/CO[3]
-                         net (fo=1, estimated)        0.000     6.965    inst_update/left_address0_i_4_n_0
-    SLICE_X11Y41         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     7.079 r  inst_update/left_address0_i_3/CO[3]
-                         net (fo=1, estimated)        0.000     7.079    inst_update/left_address0_i_3_n_0
-    SLICE_X11Y42         CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334     7.413 r  inst_update/left_address0_i_2/O[1]
-                         net (fo=2, estimated)        0.537     7.950    inst_update/A[9]
-    DSP48_X0Y16          DSP48E1 (Prop_dsp48e1_A[9]_P[2])
-                                                      4.020    11.970 r  inst_update/left_address1/P[2]
-                         net (fo=2, estimated)        0.680    12.650    inst_update/left_address1_n_103
-    SLICE_X12Y40         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.657    13.307 r  inst_update/left_address0_carry/CO[3]
-                         net (fo=1, estimated)        0.000    13.307    inst_update/left_address0_carry_n_0
-    SLICE_X12Y41         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    13.424 r  inst_update/left_address0_carry__0/CO[3]
-                         net (fo=1, estimated)        0.000    13.424    inst_update/left_address0_carry__0_n_0
-    SLICE_X12Y42         CARRY4 (Prop_carry4_CI_O[3])
-                                                      0.315    13.739 r  inst_update/left_address0_carry__1/O[3]
-                         net (fo=1, estimated)        0.434    14.173    inst_update/left_address0__0[12]
-    SLICE_X13Y43         LUT5 (Prop_lut5_I1_O)        0.307    14.480 r  inst_update/left_address[12]_i_1/O
-                         net (fo=1, routed)           0.000    14.480    inst_update/p_0_in[12]
-    SLICE_X13Y43         FDRE                                         r  inst_update/left_address_reg[12]/D
+    SLICE_X13Y51         FDRE (Prop_fdre_C_Q)         0.419     5.483 r  current_left_y_reg[1]/Q
+                         net (fo=10, estimated)       0.626     6.109    inst_update/left_address1_0[1]
+    SLICE_X12Y50         LUT2 (Prop_lut2_I0_O)        0.299     6.408 r  inst_update/left_address0_i_18/O
+                         net (fo=1, routed)           0.000     6.408    inst_update/left_address0_i_18_n_0
+    SLICE_X12Y50         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     6.941 r  inst_update/left_address0_i_4/CO[3]
+                         net (fo=1, estimated)        0.000     6.941    inst_update/left_address0_i_4_n_0
+    SLICE_X12Y51         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     7.058 r  inst_update/left_address0_i_3/CO[3]
+                         net (fo=1, estimated)        0.000     7.058    inst_update/left_address0_i_3_n_0
+    SLICE_X12Y52         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323     7.381 r  inst_update/left_address0_i_2/O[1]
+                         net (fo=2, estimated)        0.606     7.987    inst_update/A[9]
+    DSP48_X0Y21          DSP48E1 (Prop_dsp48e1_A[9]_P[6])
+                                                      4.023    12.010 r  inst_update/left_address1/P[6]
+                         net (fo=2, estimated)        0.794    12.804    inst_update/left_address1_n_99
+    SLICE_X11Y51         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.674    13.478 r  inst_update/left_address0_carry__0/CO[3]
+                         net (fo=1, estimated)        0.000    13.478    inst_update/left_address0_carry__0_n_0
+    SLICE_X11Y52         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    13.791 r  inst_update/left_address0_carry__1/O[3]
+                         net (fo=1, estimated)        0.447    14.238    inst_update/left_address0__0[12]
+    SLICE_X10Y53         LUT5 (Prop_lut5_I0_O)        0.306    14.544 r  inst_update/left_address[12]_i_1/O
+                         net (fo=1, routed)           0.000    14.544    inst_update/p_1_in[12]
+    SLICE_X10Y53         FDRE                                         r  inst_update/left_address_reg[12]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -79,16 +76,16 @@ Slack (MET) :             0.556ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, estimated)        1.873    13.244    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.335 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=2940, estimated)     1.453    14.788    inst_update/clk_100mhz_IBUF_BUFG
-    SLICE_X13Y43         FDRE                                         r  inst_update/left_address_reg[12]/C
-                         clock pessimism              0.253    15.040    
-                         clock uncertainty           -0.035    15.005    
-    SLICE_X13Y43         FDRE (Setup_fdre_C_D)        0.031    15.036    inst_update/left_address_reg[12]
+                         net (fo=2941, estimated)     1.437    14.772    inst_update/clk_100mhz_IBUF_BUFG
+    SLICE_X10Y53         FDRE                                         r  inst_update/left_address_reg[12]/C
+                         clock pessimism              0.254    15.025    
+                         clock uncertainty           -0.035    14.990    
+    SLICE_X10Y53         FDRE (Setup_fdre_C_D)        0.077    15.067    inst_update/left_address_reg[12]
   -------------------------------------------------------------------
-                         required time                         15.036    
-                         arrival time                         -14.480    
+                         required time                         15.067    
+                         arrival time                         -14.544    
   -------------------------------------------------------------------
-                         slack                                  0.556    
+                         slack                                  0.523    
 
 
 
