@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Fri Dec 15 00:27:39 2023
+| Date         : Fri Dec 15 01:35:29 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing_summary -file obj/post_synth_timing_summary.rpt
 | Design       : top_level
@@ -52,8 +52,8 @@ Table of Contents
 2. checking constant_clock (0)
 3. checking pulse_width_clock (0)
 4. checking unconstrained_internal_endpoints (0)
-5. checking no_input_delay (6)
-6. checking no_output_delay (2)
+5. checking no_input_delay (30)
+6. checking no_output_delay (4)
 7. checking multiple_clock (0)
 8. checking generated_clocks (0)
 9. checking loops (0)
@@ -83,16 +83,16 @@ Table of Contents
  There are 0 pins that are not constrained for maximum delay due to constant clock.
 
 
-5. checking no_input_delay (6)
-------------------------------
- There are 6 input ports with no input delay specified. (HIGH)
+5. checking no_input_delay (30)
+-------------------------------
+ There are 30 input ports with no input delay specified. (HIGH)
 
  There are 0 input ports with no input delay but user has a false path constraint.
 
 
-6. checking no_output_delay (2)
+6. checking no_output_delay (4)
 -------------------------------
- There are 2 ports with no output delay specified. (HIGH)
+ There are 4 ports with no output delay specified. (HIGH)
 
  There are 0 ports with no output delay but user has a false path constraint
 
@@ -137,10 +137,10 @@ Table of Contents
 
     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
     -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-      5.982        0.000                      0                  159        0.134        0.000                      0                  159        3.500        0.000                       0                    88  
+     -9.614    -1080.128                    130                 5215        0.073        0.000                      0                 5215        3.020        0.000                       0                  2466  
 
 
-All user specified timing constraints are met.
+Timing constraints are not met.
 
 
 ------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ gclk   {0.000 4.000}      10.000          100.000
 
 Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
 -----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-gclk                5.982        0.000                      0                  159        0.134        0.000                      0                  159        3.500        0.000                       0                    88  
+gclk               -9.614    -1080.128                    130                 5215        0.073        0.000                      0                 5215        3.020        0.000                       0                  2466  
 
 
 ------------------------------------------------------------------------------------------------
@@ -191,24 +191,24 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  gclk
   To Clock:  gclk
 
-Setup :            0  Failing Endpoints,  Worst Slack        5.982ns,  Total Violation        0.000ns
-Hold  :            0  Failing Endpoints,  Worst Slack        0.134ns,  Total Violation        0.000ns
-PW    :            0  Failing Endpoints,  Worst Slack        3.500ns,  Total Violation        0.000ns
+Setup :          130  Failing Endpoints,  Worst Slack       -9.614ns,  Total Violation    -1080.128ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.073ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        3.020ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
 
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             5.982ns  (required time - arrival time)
-  Source:                 nolabel_line253/latch_counter_reg[4]/C
-                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            nolabel_line253/latch_counter_reg[24]/D
-                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+Slack (VIOLATED) :        -9.614ns  (required time - arrival time)
+  Source:                 left_rotated_addr1/CLK
+                            (rising edge-triggered cell DSP48E1 clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            nolabel_line235/left_frame_buffer/BRAM_reg_0/ADDRARDADDR[10]
+                            (rising edge-triggered cell RAMB36E1 clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        3.867ns  (logic 2.239ns (57.900%)  route 1.628ns (42.100%))
-  Logic Levels:           7  (CARRY4=6 LUT3=1)
+  Data Path Delay:        18.867ns  (logic 11.305ns (59.918%)  route 7.562ns (40.082%))
+  Logic Levels:           23  (CARRY4=15 LUT2=1 LUT3=5 LUT4=1 LUT5=1)
   Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
     Destination Clock Delay (DCD):    2.660ns = ( 12.660 - 10.000 ) 
     Source Clock Delay      (SCD):    2.920ns
@@ -227,32 +227,74 @@ Slack (MET) :             5.982ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.800     2.240    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.096     2.336 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=87, unplaced)        0.584     2.920    nolabel_line253/clk_100mhz_IBUF_BUFG
-                         FDRE                                         r  nolabel_line253/latch_counter_reg[4]/C
+                         net (fo=2473, unplaced)      0.584     2.920    clk_100mhz_IBUF_BUFG
+                         DSP48E1                                      r  left_rotated_addr1/CLK
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.456     3.376 r  nolabel_line253/latch_counter_reg[4]/Q
-                         net (fo=3, unplaced)         1.001     4.377    nolabel_line253/latch_counter[4]
-                         CARRY4 (Prop_carry4_S[3]_CO[3])
-                                                      0.697     5.074 r  nolabel_line253/latch_counter_reg[4]_i_2/CO[3]
-                         net (fo=1, unplaced)         0.009     5.083    nolabel_line253/latch_counter_reg[4]_i_2_n_0
+                         DSP48E1 (Prop_dsp48e1_CLK_P[1])
+                                                      4.009     6.929 r  left_rotated_addr1/P[1]
+                         net (fo=2, unplaced)         0.800     7.729    left/v_pipe/P[1]
+                         LUT3 (Prop_lut3_I2_O)        0.124     7.853 r  left/v_pipe/BRAM_reg_0_i_414/O
+                         net (fo=1, unplaced)         0.000     7.853    left/v_pipe/BRAM_reg_0_i_414_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550     8.403 r  left/v_pipe/BRAM_reg_0_i_306/CO[3]
+                         net (fo=1, unplaced)         0.009     8.412    left/v_pipe/BRAM_reg_0_i_306_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.348     8.760 r  left/v_pipe/BRAM_reg_0_i_294/O[1]
+                         net (fo=41, unplaced)        0.676     9.436    left/v_pipe/left_rotated_addr1__0[5]
+                         LUT3 (Prop_lut3_I0_O)        0.306     9.742 r  left/v_pipe/BRAM_reg_0_i_187/O
+                         net (fo=5, unplaced)         0.667    10.409    left/v_pipe/BRAM_reg_0_i_187_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    10.916 r  left/v_pipe/BRAM_reg_0_i_427/CO[3]
+                         net (fo=1, unplaced)         0.000    10.916    left/v_pipe/BRAM_reg_0_i_427_n_0
                          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     5.197 r  nolabel_line253/latch_counter_reg[8]_i_2/CO[3]
-                         net (fo=1, unplaced)         0.000     5.197    nolabel_line253/latch_counter_reg[8]_i_2_n_0
-                         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     5.311 r  nolabel_line253/latch_counter_reg[12]_i_2/CO[3]
-                         net (fo=1, unplaced)         0.000     5.311    nolabel_line253/latch_counter_reg[12]_i_2_n_0
-                         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     5.425 r  nolabel_line253/latch_counter_reg[16]_i_2/CO[3]
-                         net (fo=1, unplaced)         0.000     5.425    nolabel_line253/latch_counter_reg[16]_i_2_n_0
-                         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114     5.539 r  nolabel_line253/latch_counter_reg[20]_i_2/CO[3]
-                         net (fo=1, unplaced)         0.000     5.539    nolabel_line253/latch_counter_reg[20]_i_2_n_0
+                                                      0.114    11.030 r  left/v_pipe/BRAM_reg_0_i_325/CO[3]
+                         net (fo=1, unplaced)         0.000    11.030    left/v_pipe/BRAM_reg_0_i_325_n_0
+                         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.256    11.286 r  left/v_pipe/BRAM_reg_0_i_295/O[2]
+                         net (fo=3, unplaced)         0.923    12.209    left/v_pipe/BRAM_reg_0_i_295_n_5
+                         LUT3 (Prop_lut3_I0_O)        0.301    12.510 r  left/v_pipe/BRAM_reg_0_i_195/O
+                         net (fo=1, unplaced)         0.639    13.149    left/v_pipe/BRAM_reg_0_i_195_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.507    13.656 r  left/v_pipe/BRAM_reg_0_i_87/CO[3]
+                         net (fo=1, unplaced)         0.000    13.656    left/v_pipe/BRAM_reg_0_i_87_n_0
                          CARRY4 (Prop_carry4_CI_O[3])
-                                                      0.329     5.868 r  nolabel_line253/latch_counter_reg[24]_i_2/O[3]
-                         net (fo=1, unplaced)         0.618     6.486    nolabel_line253/latch_counter0[24]
-                         LUT3 (Prop_lut3_I2_O)        0.301     6.787 r  nolabel_line253/latch_counter[24]_i_1/O
-                         net (fo=1, unplaced)         0.000     6.787    nolabel_line253/p_1_in[24]
-                         FDRE                                         r  nolabel_line253/latch_counter_reg[24]/D
+                                                      0.329    13.985 r  left/v_pipe/BRAM_reg_0_i_84/O[3]
+                         net (fo=3, unplaced)         0.636    14.621    left/v_pipe/BRAM_reg_0_i_84_n_4
+                         LUT3 (Prop_lut3_I0_O)        0.307    14.928 r  left/v_pipe/BRAM_reg_0_i_39/O
+                         net (fo=1, unplaced)         0.333    15.261    left/v_pipe/BRAM_reg_0_i_39_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.526    15.787 r  left/v_pipe/BRAM_reg_0_i_19/CO[3]
+                         net (fo=1, unplaced)         0.000    15.787    left/v_pipe/BRAM_reg_0_i_19_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.348    16.135 r  left/v_pipe/BRAM_reg_0_i_16/O[1]
+                         net (fo=5, unplaced)         0.639    16.774    left/v_pipe/BRAM_reg_0_i_32_0[1]
+                         LUT2 (Prop_lut2_I0_O)        0.306    17.080 r  left/v_pipe/BRAM_reg_0_i_452/O
+                         net (fo=1, unplaced)         0.000    17.080    left/v_pipe/BRAM_reg_0_i_452_n_0
+                         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401    17.481 r  left/v_pipe/BRAM_reg_0_i_357/CO[3]
+                         net (fo=1, unplaced)         0.000    17.481    left/v_pipe/BRAM_reg_0_i_357_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    17.595 r  left/v_pipe/BRAM_reg_0_i_266/CO[3]
+                         net (fo=1, unplaced)         0.000    17.595    left/v_pipe/BRAM_reg_0_i_266_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    17.709 r  left/v_pipe/BRAM_reg_0_i_155/CO[3]
+                         net (fo=1, unplaced)         0.000    17.709    left/v_pipe/BRAM_reg_0_i_155_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.348    18.057 r  left/v_pipe/BRAM_reg_0_i_78/O[1]
+                         net (fo=3, unplaced)         0.629    18.686    left/v_pipe/BRAM_reg_0_i_78_n_6
+                         LUT4 (Prop_lut4_I1_O)        0.306    18.992 r  left/v_pipe/BRAM_reg_0_i_147/O
+                         net (fo=1, unplaced)         0.000    18.992    left/v_pipe/BRAM_reg_0_i_147_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    19.542 r  left/v_pipe/BRAM_reg_0_i_68/CO[3]
+                         net (fo=1, unplaced)         0.000    19.542    left/v_pipe/BRAM_reg_0_i_68_n_0
+                         CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.178    19.720 r  left/v_pipe/BRAM_reg_0_i_33/CO[1]
+                         net (fo=1, unplaced)         0.312    20.032    left/v_pipe/BRAM_reg_0_i_33_n_2
+                         LUT3 (Prop_lut3_I0_O)        0.332    20.364 r  left/v_pipe/BRAM_reg_0_i_17/O
+                         net (fo=14, unplaced)        0.500    20.864    nolabel_line235/BRAM_reg_3
+                         LUT5 (Prop_lut5_I1_O)        0.124    20.988 r  nolabel_line235/BRAM_reg_0_i_5/O
+                         net (fo=4, unplaced)         0.800    21.787    nolabel_line235/left_frame_buffer/ADDRARDADDR[9]
+                         RAMB36E1                                     r  nolabel_line235/left_frame_buffer/BRAM_reg_0/ADDRARDADDR[10]
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -261,16 +303,17 @@ Slack (MET) :             5.982ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.760    12.130    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.091    12.221 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=87, unplaced)        0.439    12.660    nolabel_line253/clk_100mhz_IBUF_BUFG
-                         FDRE                                         r  nolabel_line253/latch_counter_reg[24]/C
+                         net (fo=2473, unplaced)      0.439    12.660    nolabel_line235/left_frame_buffer/clk_100mhz_IBUF_BUFG
+                         RAMB36E1                                     r  nolabel_line235/left_frame_buffer/BRAM_reg_0/CLKARDCLK
                          clock pessimism              0.115    12.775    
                          clock uncertainty           -0.035    12.740    
-                         FDRE (Setup_fdre_C_D)        0.029    12.769    nolabel_line253/latch_counter_reg[24]
+                         RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[10])
+                                                     -0.566    12.174    nolabel_line235/left_frame_buffer/BRAM_reg_0
   -------------------------------------------------------------------
-                         required time                         12.769    
-                         arrival time                          -6.787    
+                         required time                         12.174    
+                         arrival time                         -21.787    
   -------------------------------------------------------------------
-                         slack                                  5.982    
+                         slack                                 -9.614    
 
 
 
@@ -278,16 +321,16 @@ Slack (MET) :             5.982ns  (required time - arrival time)
 
 Min Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             0.134ns  (arrival time - required time)
-  Source:                 nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[15]/C
+Slack (MET) :             0.073ns  (arrival time - required time)
+  Source:                 left/recover_m/data_valid_out_reg/C
                             (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[16]/D
-                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            left/valid_pipe/buffer_reg[2]_srl2___left_addr_pipe_buffer_reg_r_0/D
+                            (rising edge-triggered cell SRL16E clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Hold (Min at Fast Process Corner)
   Requirement:            0.000ns  (gclk rise@0.000ns - gclk rise@0.000ns)
-  Data Path Delay:        0.370ns  (logic 0.239ns (64.578%)  route 0.131ns (35.422%))
-  Logic Levels:           1  (LUT2=1)
+  Data Path Delay:        0.282ns  (logic 0.141ns (50.038%)  route 0.141ns (49.962%))
+  Logic Levels:           0  
   Clock Path Skew:        0.145ns (DCD - SCD - CPR)
     Destination Clock Delay (DCD):    1.039ns
     Source Clock Delay      (SCD):    0.686ns
@@ -301,14 +344,12 @@ Slack (MET) :             0.134ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.209     0.209 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.337     0.546    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.026     0.572 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=87, unplaced)        0.114     0.686    nolabel_line253/inst_cascade/uut_led/clk_100mhz_IBUF_BUFG
-                         FDRE                                         r  nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[15]/C
+                         net (fo=2473, unplaced)      0.114     0.686    left/recover_m/clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  left/recover_m/data_valid_out_reg/C
   -------------------------------------------------------------------    -------------------
-                         FDRE (Prop_fdre_C_Q)         0.141     0.827 r  nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[15]/Q
-                         net (fo=1, unplaced)         0.131     0.958    nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg_n_0_[15]
-                         LUT2 (Prop_lut2_I1_O)        0.098     1.056 r  nolabel_line253/inst_cascade/uut_led/rgb_buffer[16]_i_1/O
-                         net (fo=1, unplaced)         0.000     1.056    nolabel_line253/inst_cascade/uut_led/rgb_buffer[16]
-                         FDRE                                         r  nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[16]/D
+                         FDRE (Prop_fdre_C_Q)         0.141     0.827 r  left/recover_m/data_valid_out_reg/Q
+                         net (fo=1, unplaced)         0.141     0.967    left/valid_pipe/data_valid_out
+                         SRL16E                                       r  left/valid_pipe/buffer_reg[2]_srl2___left_addr_pipe_buffer_reg_r_0/D
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)       0.000     0.000 r  
@@ -317,15 +358,16 @@ Slack (MET) :             0.134ns  (arrival time - required time)
     N15                  IBUF (Prop_ibuf_I_O)         0.396     0.396 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, unplaced)         0.355     0.751    clk_100mhz_IBUF
                          BUFG (Prop_bufg_I_O)         0.029     0.780 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=87, unplaced)        0.259     1.039    nolabel_line253/inst_cascade/uut_led/clk_100mhz_IBUF_BUFG
-                         FDRE                                         r  nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[16]/C
+                         net (fo=2473, unplaced)      0.259     1.039    left/valid_pipe/clk_100mhz_IBUF_BUFG
+                         SRL16E                                       r  left/valid_pipe/buffer_reg[2]_srl2___left_addr_pipe_buffer_reg_r_0/CLK
                          clock pessimism             -0.208     0.831    
-                         FDRE (Hold_fdre_C_D)         0.091     0.922    nolabel_line253/inst_cascade/uut_led/rgb_buffer_reg[16]
+                         SRL16E (Hold_srl16e_CLK_D)
+                                                      0.064     0.895    left/valid_pipe/buffer_reg[2]_srl2___left_addr_pipe_buffer_reg_r_0
   -------------------------------------------------------------------
-                         required time                         -0.922    
-                         arrival time                           1.056    
+                         required time                         -0.895    
+                         arrival time                           0.967    
   -------------------------------------------------------------------
-                         slack                                  0.134    
+                         slack                                  0.073    
 
 
 
@@ -338,10 +380,10 @@ Waveform(ns):       { 0.000 4.000 }
 Period(ns):         10.000
 Sources:            { clk_100mhz }
 
-Check Type        Corner  Lib Pin  Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
-Min Period        n/a     BUFG/I   n/a            2.155         10.000      7.845                clk_100mhz_IBUF_BUFG_inst/I
-Low Pulse Width   Slow    FDRE/C   n/a            0.500         6.000       5.500                left/camera_m/xclk_count_reg[0]/C
-High Pulse Width  Slow    FDRE/C   n/a            0.500         4.000       3.500                left/camera_m/xclk_count_reg[0]/C
+Check Type        Corner  Lib Pin      Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
+Min Period        n/a     DSP48E1/CLK  n/a            3.884         10.000      6.116                left/nolabel_line116/yb_reg/CLK
+Low Pulse Width   Slow    SRL16E/CLK   n/a            0.980         6.000       5.020                left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/CLK
+High Pulse Width  Slow    SRL16E/CLK   n/a            0.980         4.000       3.020                left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/CLK
 
 
 

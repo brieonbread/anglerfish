@@ -30,9 +30,11 @@ module stereo_match (
   input wire reading,    // high when reading from ssd buffer, low when not
   input wire [$clog2(320*240)-1:0] external_ssd_addr,
   output logic [7:0] ssd_dout,
-  output logic new_frame_out // flag tells us when frame is done processing
+  output logic new_frame_out, // flag tells us when frame is done processing
+  output logic sofar
   );
 
+  assign sofar = |min_ssd_sofar;
 
   // logics associated with left/right BRAMs
   logic [47:0] left_dout;
@@ -375,8 +377,7 @@ module stereo_match (
 xilinx_single_port_ram_read_first #(
     .RAM_WIDTH(48), // NOTE: assume block size = 6
     .RAM_DEPTH(320*40), // NOTE: assume block size = 6
-    .RAM_PERFORMANCE("HIGH_PERFORMANCE"),
-    .INIT_FILE(`FPATH(left_image.mem))
+    .RAM_PERFORMANCE("HIGH_PERFORMANCE")
   )
     left_frame_buffer (
     .addra((writing_left) ? external_left_addr : left_address), //pixels are stored using this math, assumes 0 indexing
@@ -392,8 +393,7 @@ xilinx_single_port_ram_read_first #(
   xilinx_single_port_ram_read_first #(
     .RAM_WIDTH(48),// NOTE: assume block size = 6
     .RAM_DEPTH(320*40), // NOTE: assume block size = 6
-    .RAM_PERFORMANCE("HIGH_PERFORMANCE"),
-    .INIT_FILE(`FPATH(right_image.mem))
+    .RAM_PERFORMANCE("HIGH_PERFORMANCE")
     )
     right_frame_buffer (
     .addra((writing_right) ? external_right_addr : right_address), //pixels are stored using this math, assumes 0 indexing
@@ -414,7 +414,7 @@ xilinx_single_port_ram_read_first #(
     ssd_result (
     .addra((reading)? external_ssd_addr : ssd_addr), //pixels are stored using this math, assumes 0 indexing
     .clka(clk_100mhz),
-    .wea((reading)? 1'b0 : 1'b1),
+    .wea((reading)? 1'b0 : ssd_wea),
     .dina(ssd_din),
     .ena(1'b1),
     .regcea(1'b1),

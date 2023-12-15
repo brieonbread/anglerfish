@@ -73,8 +73,8 @@ module top_level(
         CAMERA_COLLECTION : begin
           if (left_addr == 0) l_started <= 1;
           if (right_addr == 0) r_started <= 1;
-          if (l_started && (left_addr == (320*40))) l_finished <= 1;
-          if (r_started && (right_addr == (320*40))) r_finished <= 1;
+          if (l_started && (left_addr >= (320*40)-1)) l_finished <= 1;
+          if (r_started && (right_addr >= (320*40)-1)) r_finished <= 1;
           if (l_finished && r_finished) begin
             state <= STEREO_START;
             new_frame <= 1; // this signals high only for one cycle in order to start algorithm
@@ -231,8 +231,7 @@ module top_level(
   // SSD
   logic default_lookup;
   assign default_lookup = 0;
-  
-
+  //logic [7:0] disparity;
   stereo_match(
     .clk_100mhz(clk_pixel), // doesn't actually need to be 100 MHz
     .sys_rst(sys_rst),
@@ -243,10 +242,11 @@ module top_level(
     .external_right_addr(right_rotated_addr),
     .left_din(left_bw),
     .right_din(right_bw),
-    .reading(get_output),
+    .reading(sw[1]),
     .external_ssd_addr(readout_addr),  // address to look up in SSD results BRAM
     .ssd_dout(disparity),     // output from SSD results BRAM
-    .new_frame_out(frame_done) // flag tells us when frame is done processing
+    .new_frame_out(frame_done), // flag tells us when frame is done processing
+    .sofar(led[0])
     );
   
   // LED
