@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Thu Dec 14 02:24:50 2023
+| Date         : Fri Dec 15 00:27:39 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_synth_timing.rpt
 | Design       : top_level
@@ -12,77 +12,78 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (MET) :             5.459ns  (required time - arrival time)
-  Source:                 left/data_in1/CLK
-                            (rising edge-triggered cell DSP48E1 clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
-  Destination:            left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/D
-                            (rising edge-triggered cell SRL16E clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
-  Path Group:             clk_pixel_clk_wiz_0
+Slack (MET) :             5.982ns  (required time - arrival time)
+  Source:                 nolabel_line253/latch_counter_reg[4]/C
+                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Destination:            nolabel_line253/latch_counter_reg[24]/D
+                            (rising edge-triggered cell FDRE clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
+  Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            13.468ns  (clk_pixel_clk_wiz_0 rise@13.468ns - clk_pixel_clk_wiz_0 rise@0.000ns)
-  Data Path Delay:        7.652ns  (logic 4.629ns (60.496%)  route 3.023ns (39.504%))
-  Logic Levels:           5  (LUT6=5)
+  Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
+  Data Path Delay:        3.867ns  (logic 2.239ns (57.900%)  route 1.628ns (42.100%))
+  Logic Levels:           7  (CARRY4=6 LUT3=1)
   Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    -2.279ns = ( 11.189 - 13.468 ) 
-    Source Clock Delay      (SCD):    -1.604ns
-    Clock Pessimism Removal (CPR):    0.530ns
-  Clock Uncertainty:      0.168ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Destination Clock Delay (DCD):    2.660ns = ( 12.660 - 10.000 ) 
+    Source Clock Delay      (SCD):    2.920ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
-    Discrete Jitter          (DJ):    0.329ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
-                         (clock clk_pixel_clk_wiz_0 rise edge)
-                                                      0.000     0.000 r  
+                         (clock gclk rise edge)       0.000     0.000 r  
     N15                                               0.000     0.000 r  clk_100mhz (IN)
-                         net (fo=0)                   0.000     0.000    mhdmicw/clk_100mhz
-    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  mhdmicw/clkin1_ibufg/O
-                         net (fo=1, unplaced)         0.584     2.024    mhdmicw/clk_ref_clk_wiz_0
-                         MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
-                                                     -5.108    -3.083 r  mhdmicw/mmcm_adv_inst/CLKOUT0
-                         net (fo=1, unplaced)         0.800    -2.284    mhdmicw/clk_pixel_clk_wiz_0
-                         BUFG (Prop_bufg_I_O)         0.096    -2.188 r  mhdmicw/clkout1_buf/O
-                         net (fo=338, unplaced)       0.584    -1.604    left/clk_pixel
-                         DSP48E1                                      r  left/data_in1/CLK
+                         net (fo=0)                   0.000     0.000    clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
+                         net (fo=1, unplaced)         0.800     2.240    clk_100mhz_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.336 r  clk_100mhz_IBUF_BUFG_inst/O
+                         net (fo=87, unplaced)        0.584     2.920    nolabel_line253/clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  nolabel_line253/latch_counter_reg[4]/C
   -------------------------------------------------------------------    -------------------
-                         DSP48E1 (Prop_dsp48e1_CLK_P[14])
-                                                      4.009     2.405 r  left/data_in1/P[14]
-                         net (fo=7, unplaced)         0.800     3.205    left/data_in1_n_91
-                         LUT6 (Prop_lut6_I5_O)        0.124     3.329 r  left/buffer_reg[46]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
-                         net (fo=5, unplaced)         0.477     3.806    left/data_in0[12]
-                         LUT6 (Prop_lut6_I5_O)        0.124     3.930 r  left/buffer_reg[43]_srl2___left_addr_pipe_buffer_reg_r_0_i_2/O
-                         net (fo=4, unplaced)         0.473     4.403    left/buffer_reg[43]_srl2___left_addr_pipe_buffer_reg_r_0_i_2_n_0
-                         LUT6 (Prop_lut6_I3_O)        0.124     4.527 r  left/buffer_reg[40]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
-                         net (fo=4, unplaced)         0.473     5.000    left/data_in0[6]
-                         LUT6 (Prop_lut6_I3_O)        0.124     5.124 r  left/buffer_reg[37]_srl2___left_addr_pipe_buffer_reg_r_0_i_2/O
-                         net (fo=3, unplaced)         0.467     5.591    left/buffer_reg[37]_srl2___left_addr_pipe_buffer_reg_r_0_i_2_n_0
-                         LUT6 (Prop_lut6_I4_O)        0.124     5.715 r  left/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0_i_1/O
-                         net (fo=1, unplaced)         0.333     6.048    left/addr_pipe/data_in0[0]
-                         SRL16E                                       r  left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/D
+                         FDRE (Prop_fdre_C_Q)         0.456     3.376 r  nolabel_line253/latch_counter_reg[4]/Q
+                         net (fo=3, unplaced)         1.001     4.377    nolabel_line253/latch_counter[4]
+                         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.697     5.074 r  nolabel_line253/latch_counter_reg[4]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.009     5.083    nolabel_line253/latch_counter_reg[4]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     5.197 r  nolabel_line253/latch_counter_reg[8]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000     5.197    nolabel_line253/latch_counter_reg[8]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     5.311 r  nolabel_line253/latch_counter_reg[12]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000     5.311    nolabel_line253/latch_counter_reg[12]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     5.425 r  nolabel_line253/latch_counter_reg[16]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000     5.425    nolabel_line253/latch_counter_reg[16]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     5.539 r  nolabel_line253/latch_counter_reg[20]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000     5.539    nolabel_line253/latch_counter_reg[20]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.329     5.868 r  nolabel_line253/latch_counter_reg[24]_i_2/O[3]
+                         net (fo=1, unplaced)         0.618     6.486    nolabel_line253/latch_counter0[24]
+                         LUT3 (Prop_lut3_I2_O)        0.301     6.787 r  nolabel_line253/latch_counter[24]_i_1/O
+                         net (fo=1, unplaced)         0.000     6.787    nolabel_line253/p_1_in[24]
+                         FDRE                                         r  nolabel_line253/latch_counter_reg[24]/D
   -------------------------------------------------------------------    -------------------
 
-                         (clock clk_pixel_clk_wiz_0 rise edge)
-                                                     13.468    13.468 r  
-    N15                                               0.000    13.468 r  clk_100mhz (IN)
-                         net (fo=0)                   0.000    13.468    mhdmicw/clk_100mhz
-    N15                  IBUF (Prop_ibuf_I_O)         1.370    14.838 r  mhdmicw/clkin1_ibufg/O
-                         net (fo=1, unplaced)         0.439    15.277    mhdmicw/clk_ref_clk_wiz_0
-                         MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
-                                                     -5.378     9.899 r  mhdmicw/mmcm_adv_inst/CLKOUT0
-                         net (fo=1, unplaced)         0.760    10.659    mhdmicw/clk_pixel_clk_wiz_0
-                         BUFG (Prop_bufg_I_O)         0.091    10.750 r  mhdmicw/clkout1_buf/O
-                         net (fo=338, unplaced)       0.439    11.189    left/addr_pipe/clk_pixel
-                         SRL16E                                       r  left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0/CLK
-                         clock pessimism              0.530    11.719    
-                         clock uncertainty           -0.168    11.551    
-                         SRL16E (Setup_srl16e_CLK_D)
-                                                     -0.044    11.507    left/addr_pipe/buffer_reg[34]_srl2___left_addr_pipe_buffer_reg_r_0
+                         (clock gclk rise edge)      10.000    10.000 r  
+    N15                                               0.000    10.000 r  clk_100mhz (IN)
+                         net (fo=0)                   0.000    10.000    clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
+                         net (fo=1, unplaced)         0.760    12.130    clk_100mhz_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    12.221 r  clk_100mhz_IBUF_BUFG_inst/O
+                         net (fo=87, unplaced)        0.439    12.660    nolabel_line253/clk_100mhz_IBUF_BUFG
+                         FDRE                                         r  nolabel_line253/latch_counter_reg[24]/C
+                         clock pessimism              0.115    12.775    
+                         clock uncertainty           -0.035    12.740    
+                         FDRE (Setup_fdre_C_D)        0.029    12.769    nolabel_line253/latch_counter_reg[24]
   -------------------------------------------------------------------
-                         required time                         11.507    
-                         arrival time                          -6.048    
+                         required time                         12.769    
+                         arrival time                          -6.787    
   -------------------------------------------------------------------
-                         slack                                  5.459    
+                         slack                                  5.982    
 
 
 

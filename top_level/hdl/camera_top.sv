@@ -182,7 +182,7 @@ module camera_top(
     .DATA_WIDTH(10) ) v_pipe (
     .clk_in(clk_pixel),
     .rst_in(rst_in),
-    .data_in(vcount_rec)),
+    .data_in(vcount_rec),
     .data_out(v_out) );
 
 endmodule

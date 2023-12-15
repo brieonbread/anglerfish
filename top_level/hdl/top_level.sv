@@ -36,11 +36,11 @@ module top_level(
   logic pacing; // begins FSM
   assign pacing = sw[0];
 
-  logic output_left, output_right; // buffer output stuff
-  assign output_left = sw[1];
-  assign output_right = sw[2];
-  logic output_disparity;
-  assign output_disparity = sw[3];
+  //logic output_left, output_right; // buffer output stuff
+  //assign output_left = sw[1];
+  //assign output_right = sw[2];
+  //logic output_disparity;
+  //assign output_disparity = sw[3];
 
   logic [3:0] pace_speed; // set pacing for LED
   assign pace_speed = sw[15:12];
@@ -53,7 +53,7 @@ module top_level(
   top_state state;
 
   // variables for controlling state and module functioning
-  logic collecting, new_frame, l_started, l_finished, r_started, r_finished, frame_done;
+  logic collecting, new_frame, l_started, l_finished, r_started, r_finished, frame_done, get_output;
   assign collecting = (state == CAMERA_COLLECTION);
 
   always_ff @(posedge clk_pixel) begin
@@ -64,6 +64,7 @@ module top_level(
       l_finished <= 0;
       r_started <= 0;
       r_finished <= 0;
+      get_output <= 0;
     end else begin
       case (state)
         IDLE : begin
@@ -77,6 +78,7 @@ module top_level(
           if (l_finished && r_finished) begin
             state <= STEREO_START;
             new_frame <= 1; // this signals high only for one cycle in order to start algorithm
+            get_output <= 0;
           end
         end
         STEREO_START : begin
@@ -88,6 +90,7 @@ module top_level(
           if (frame_done) state <= STEREO_DONE;
         end
         STEREO_DONE : begin
+          get_output <= 1;
           state <= (pacing)? CAMERA_COLLECTION : IDLE;
         end
         UPDATE_LED : begin // TODO: currently, depth not coupled with LED speed control
@@ -99,14 +102,15 @@ module top_level(
   // CAMERA STUFF
 
   logic clk_pixel;
-  logic clk_5x;
-  hdmi_clk_wiz_720p mhdmicw (
-      .clk_pixel(clk_pixel),
-      .clk_tmds(clk_5x),
-      .reset(0),
-      .locked(0),
-      .clk_ref(clk_100mhz)
-  );
+  assign clk_pixel = clk_100mhz;
+  //logic clk_5x;
+  //hdmi_clk_wiz_720p mhdmicw (
+  //    .clk_pixel(clk_pixel),
+  //    .clk_tmds(clk_5x),
+  //    .reset(0),
+  //    .locked(0),
+  //    .clk_ref(clk_100mhz)
+  //);
 
   //left camera and BRAM
   logic left_wea;
@@ -120,11 +124,11 @@ module top_level(
     .rst_in(sys_rst),
     .data_in(pmoda),
     .sync_in(gpio[2:0]),
-    .camclk(cam_clk),
+    .camclk(camclk),
     .addr_out(left_addr),
     .wea_out(left_wea),
     .greyscale_data_out(left_bw),
-    .rgb_out(left_rgb) // for swimmer COM?
+    .rgb_out(left_rgb), // for swimmer COM?
     .h_out(left_h),
     .v_out(left_v)
   );
@@ -167,7 +171,7 @@ module top_level(
     .data_in(pmodb),
     .sync_in(gpio[5:3]),
     .camclk(),
-    .addr_out(right_addr_out),
+    .addr_out(right_addr),
     .wea_out(right_wea),
     .greyscale_data_out(right_bw),
     .rgb_out(right_rgb),
@@ -230,17 +234,24 @@ module top_level(
   logic [7:0] disparity;
 
   stereo_match(
-    .clk_100mhz(clk_pixel),
+    .clk_100mhz(clk_pixel), // doesn't actually need to be 100 MHz
     .sys_rst(sys_rst),
     .new_frame_in(new_frame),   // flag tells us when new frame is ready for processing
-    .readout_addr(default_lookup),  // address to look up in SSD results BRAM
+    .writing_left(left_wea && collecting), // MUST be low if not writing
+    .writing_right(right_wea && collecting),
+    .external_left_addr(left_rotated_addr), 
+    .external_right_addr(right_rotated_addr),
+    .left_din(left_bw),
+    .right_din(right_bw),
+    .reading(get_output),
+    .external_ssd_addr(default_lookup),  // address to look up in SSD results BRAM
     .ssd_dout(disparity),     // output from SSD results BRAM
-    .new_frame_out(frame_done), // flag tells us when frame is done processing
+    .new_frame_out(frame_done) // flag tells us when frame is done processing
     );
   
   // LED
   led_top (
-      .clk_in(clk_pixel),
+      .clk_in(clk_100mhz),
       .rst_in(sys_rst),
       .start(use_leds),
       .speed(pace_speed),
