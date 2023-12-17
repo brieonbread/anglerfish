@@ -1,0 +1,83 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
+| Date         : Tue Dec  5 19:04:56 2023
+| Host         : worker running 64-bit Ubuntu 20.04.6 LTS
+| Command      : report_timing -file obj/post_route_timing.rpt
+| Design       : top_level
+| Device       : 7s50-csga324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             9.273ns  (required time - arrival time)
+  Source:                 nolabel_line58/baud_counter_reg[3]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
+  Destination:            nolabel_line58/data_o_reg[2]_lopt_replica/CE
+                            (rising edge-triggered cell FDRE clocked by clk_pixel_clk_wiz_0  {rise@0.000ns fall@6.734ns period=13.468ns})
+  Path Group:             clk_pixel_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            13.468ns  (clk_pixel_clk_wiz_0 rise@13.468ns - clk_pixel_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        3.799ns  (logic 1.126ns (29.641%)  route 2.673ns (70.359%))
+  Logic Levels:           3  (LUT4=2 LUT5=1)
+  Clock Path Skew:        -0.023ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.515ns = ( 11.953 - 13.468 ) 
+    Source Clock Delay      (SCD):    -0.917ns
+    Clock Pessimism Removal (CPR):    0.575ns
+  Clock Uncertainty:      0.168ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.329ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_pixel_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  
+    N15                                               0.000     0.000 r  clk_100mhz (IN)
+                         net (fo=0)                   0.000     0.000    mhdmicw/clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  mhdmicw/clkin1_ibufg/O
+                         net (fo=1, routed)           1.233     2.673    mhdmicw/clk_ref_clk_wiz_0
+    MMCME2_ADV_X0Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -6.965    -4.291 r  mhdmicw/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.666    -2.625    mhdmicw/clk_pixel_clk_wiz_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096    -2.529 r  mhdmicw/clkout1_buf/O
+                         net (fo=87, routed)          1.612    -0.917    nolabel_line58/CLK
+    SLICE_X2Y78          FDRE                                         r  nolabel_line58/baud_counter_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X2Y78          FDRE (Prop_fdre_C_Q)         0.518    -0.399 f  nolabel_line58/baud_counter_reg[3]/Q
+                         net (fo=3, routed)           0.811     0.412    nolabel_line58/baud_counter_reg_n_0_[3]
+    SLICE_X2Y79          LUT4 (Prop_lut4_I2_O)        0.124     0.536 r  nolabel_line58/state[3]_i_6/O
+                         net (fo=2, routed)           0.980     1.516    nolabel_line58/state[3]_i_6_n_0
+    SLICE_X2Y80          LUT4 (Prop_lut4_I1_O)        0.153     1.669 r  nolabel_line58/baud_counter[5]_i_2/O
+                         net (fo=4, routed)           0.332     2.001    nolabel_line58/zero_baud_counter__14
+    SLICE_X2Y79          LUT5 (Prop_lut5_I4_O)        0.331     2.332 r  nolabel_line58/data_o[7]_i_1/O
+                         net (fo=15, routed)          0.550     2.882    nolabel_line58/data_o0
+    SLICE_X0Y78          FDRE                                         r  nolabel_line58/data_o_reg[2]_lopt_replica/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_pixel_clk_wiz_0 rise edge)
+                                                     13.468    13.468 r  
+    N15                                               0.000    13.468 r  clk_100mhz (IN)
+                         net (fo=0)                   0.000    13.468    mhdmicw/clk_100mhz
+    N15                  IBUF (Prop_ibuf_I_O)         1.370    14.838 r  mhdmicw/clkin1_ibufg/O
+                         net (fo=1, routed)           1.162    16.000    mhdmicw/clk_ref_clk_wiz_0
+    MMCME2_ADV_X0Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.221     8.779 r  mhdmicw/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.587    10.366    mhdmicw/clk_pixel_clk_wiz_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    10.457 r  mhdmicw/clkout1_buf/O
+                         net (fo=87, routed)          1.497    11.953    nolabel_line58/CLK
+    SLICE_X0Y78          FDRE                                         r  nolabel_line58/data_o_reg[2]_lopt_replica/C
+                         clock pessimism              0.575    12.528    
+                         clock uncertainty           -0.168    12.360    
+    SLICE_X0Y78          FDRE (Setup_fdre_C_CE)      -0.205    12.155    nolabel_line58/data_o_reg[2]_lopt_replica
+  -------------------------------------------------------------------
+                         required time                         12.155    
+                         arrival time                          -2.882    
+  -------------------------------------------------------------------
+                         slack                                  9.273    
+
+
+
+
