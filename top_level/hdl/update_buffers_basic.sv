@@ -34,6 +34,13 @@ module update_buffers_basic (
         if(rst_in) begin
             counter <= 0;
             valid_out <= 0;
+            state         <= IDLE;     //make sure to initilize all FSM and DFFs,12/14/23
+			left_address  <= '0;
+			right_address <= '0;
+			for (int k = 0; k<BLOCK_SIZE; k++) begin
+			     left_front_buffer[k]  <= '0;
+				 right_front_buffer[k] <= '0;
+			end
             
         end else begin
             case (state)

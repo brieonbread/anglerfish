@@ -31,10 +31,10 @@ module stereo_match (
   input wire [$clog2(320*240)-1:0] external_ssd_addr,
   output logic [7:0] ssd_dout,
   output logic new_frame_out, // flag tells us when frame is done processing
-  output logic sofar
+  output logic [2:0] rgb0,
+  output logic [2:0] rgb1
   );
 
-  assign sofar = |min_ssd_sofar;
 
   // logics associated with left/right BRAMs
   logic [47:0] left_dout;
@@ -45,6 +45,8 @@ module stereo_match (
 
   // logics associated with ssd result BRAM, we want to store offsets not ssd values
   logic [7:0] ssd_din; // assume max offset is 240
+
+  assign rgb1 = |ssd_dout;
 
   logic ssd_wea;
   logic [$clog2(320*240)-1:0] ssd_addr;
@@ -309,6 +311,8 @@ module stereo_match (
 
             // $display("(%d,%d): ", prev_left_x, prev_left_y);
             // $display("Min ssd so far: %d", min_ssd_sofar);
+
+            rgb0 <= |min_offset_sofar; // force vivado to synthesize
 
           end else begin
             SAVE_counter <= SAVE_counter + 1;

@@ -21,6 +21,21 @@ module mac_engine_48bit (
         if (rst_in) begin
             mac_counter <= 0;
             valid_out <= 0;
+
+            pixel_0_diff <= '0;
+            pixel_1_diff <= '0;
+            pixel_2_diff <= '0;
+            pixel_3_diff <= '0;
+            pixel_4_diff <= '0;
+            pixel_5_diff <= '0;
+            
+            pixel_0_squared <= '0;
+            pixel_1_squared <= '0;
+            pixel_2_squared <= '0;
+            pixel_3_squared <= '0;
+            pixel_4_squared <= '0;
+            pixel_5_squared <= '0;
+
         end else begin
             if (valid_in) begin
                 pixel_0_diff <= left_row[47:40] > right_row[47:40] ? left_row[47:40] - right_row[47:40] : right_row[47:40] - left_row[47:40];

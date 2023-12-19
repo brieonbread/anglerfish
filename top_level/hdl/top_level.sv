@@ -65,6 +65,8 @@ module top_level(
       r_started <= 0;
       r_finished <= 0;
       get_output <= 0;
+      left_addr <= 0;
+      right_addr <= 0;
     end else begin
       case (state)
         IDLE : begin
@@ -246,7 +248,8 @@ module top_level(
     .external_ssd_addr(readout_addr),  // address to look up in SSD results BRAM
     .ssd_dout(disparity),     // output from SSD results BRAM
     .new_frame_out(frame_done), // flag tells us when frame is done processing
-    .sofar(led[0])
+    .rgb0(rgb0),
+    .rgb1(rgb1)
     );
   
   // LED
@@ -271,7 +274,7 @@ module top_level(
 
   logic [$clog2(320*240)-1:0] readout_addr;
   logic [7:0] disparity;
-  
+
   bram_readout #(.BRAM_WIDTH(8),
                 .BRAM_DEPTH(320*240),
                 .BAUD_RATE(3000000),

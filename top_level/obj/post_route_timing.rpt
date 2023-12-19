@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
-| Date         : Fri Dec 15 01:37:06 2023
+| Date         : Fri Dec 15 02:32:11 2023
 | Host         : worker running 64-bit Ubuntu 20.04.6 LTS
 | Command      : report_timing -file obj/post_route_timing.rpt
 | Design       : top_level
@@ -12,18 +12,18 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanc
 
 Timing Report
 
-Slack (VIOLATED) :        -11.319ns  (required time - arrival time)
-  Source:                 right_rotated_addr1/CLK
+Slack (VIOLATED) :        -11.493ns  (required time - arrival time)
+  Source:                 left_rotated_addr1/CLK
                             (rising edge-triggered cell DSP48E1 clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
-  Destination:            nolabel_line235/right_frame_buffer/BRAM_reg_2/ADDRARDADDR[9]
+  Destination:            nolabel_line237/left_frame_buffer/BRAM_reg_0/ADDRARDADDR[8]
                             (rising edge-triggered cell RAMB36E1 clocked by gclk  {rise@0.000ns fall@4.000ns period=10.000ns})
   Path Group:             gclk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (gclk rise@10.000ns - gclk rise@0.000ns)
-  Data Path Delay:        20.548ns  (logic 11.024ns (53.650%)  route 9.524ns (46.350%))
-  Logic Levels:           25  (CARRY4=18 LUT2=1 LUT3=3 LUT4=2 LUT6=1)
-  Clock Path Skew:        -0.169ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.812ns = ( 14.812 - 10.000 ) 
+  Data Path Delay:        20.725ns  (logic 11.420ns (55.103%)  route 9.305ns (44.897%))
+  Logic Levels:           26  (CARRY4=18 LUT2=1 LUT3=5 LUT4=1 LUT5=1)
+  Clock Path Skew:        -0.166ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.815ns = ( 14.815 - 10.000 ) 
     Source Clock Delay      (SCD):    5.168ns
     Clock Pessimism Removal (CPR):    0.187ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
@@ -40,81 +40,83 @@ Slack (VIOLATED) :        -11.319ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.440     1.440 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, routed)           1.972     3.412    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.508 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=2474, routed)        1.660     5.168    clk_100mhz_IBUF_BUFG
-    DSP48_X0Y0           DSP48E1                                      r  right_rotated_addr1/CLK
+                         net (fo=2346, routed)        1.660     5.168    clk_100mhz_IBUF_BUFG
+    DSP48_X0Y0           DSP48E1                                      r  left_rotated_addr1/CLK
   -------------------------------------------------------------------    -------------------
-    DSP48_X0Y0           DSP48E1 (Prop_dsp48e1_CLK_P[7])
-                                                      4.009     9.177 r  right_rotated_addr1/P[7]
-                         net (fo=2, routed)           0.862    10.038    right/v_pipe/P[7]
-    SLICE_X12Y1          LUT4 (Prop_lut4_I3_O)        0.124    10.162 r  right/v_pipe/BRAM_reg_0_i_393__0/O
-                         net (fo=1, routed)           0.000    10.162    right/v_pipe/BRAM_reg_0_i_393__0_n_0
-    SLICE_X12Y1          CARRY4 (Prop_carry4_S[3]_CO[3])
-                                                      0.376    10.538 r  right/v_pipe/BRAM_reg_0_i_294__0/CO[3]
-                         net (fo=1, routed)           0.000    10.538    right/v_pipe/BRAM_reg_0_i_294__0_n_0
-    SLICE_X12Y2          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.655 r  right/v_pipe/BRAM_reg_0_i_290__0/CO[3]
-                         net (fo=1, routed)           0.000    10.655    right/v_pipe/BRAM_reg_0_i_290__0_n_0
-    SLICE_X12Y3          CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    10.772 r  right/v_pipe/BRAM_reg_0_i_251__0/CO[3]
-                         net (fo=1, routed)           0.000    10.772    right/v_pipe/BRAM_reg_0_i_251__0_n_0
-    SLICE_X12Y4          CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.323    11.095 r  right/v_pipe/BRAM_reg_0_i_250__0/O[1]
-                         net (fo=36, routed)          1.167    12.263    right/v_pipe/right_rotated_addr1__0[17]
-    SLICE_X12Y8          LUT3 (Prop_lut3_I0_O)        0.306    12.569 r  right/v_pipe/BRAM_reg_0_i_106__0/O
-                         net (fo=5, routed)           0.657    13.226    right/v_pipe/BRAM_reg_0_i_106__0_n_0
-    SLICE_X15Y5          CARRY4 (Prop_carry4_DI[1]_O[3])
-                                                      0.596    13.822 r  right/v_pipe/BRAM_reg_0_i_428__0/O[3]
-                         net (fo=3, routed)           0.927    14.749    right/v_pipe/BRAM_reg_0_i_428__0_n_4
-    SLICE_X6Y4           LUT3 (Prop_lut3_I2_O)        0.306    15.055 r  right/v_pipe/BRAM_reg_0_i_313__0/O
-                         net (fo=1, routed)           0.562    15.617    right/v_pipe/BRAM_reg_0_i_313__0_n_0
-    SLICE_X10Y4          CARRY4 (Prop_carry4_DI[2]_CO[3])
-                                                      0.404    16.021 r  right/v_pipe/BRAM_reg_0_i_215__0/CO[3]
-                         net (fo=1, routed)           0.000    16.021    right/v_pipe/BRAM_reg_0_i_215__0_n_0
-    SLICE_X10Y5          CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.323    16.344 r  right/v_pipe/BRAM_reg_0_i_99__0/O[1]
-                         net (fo=3, routed)           0.824    17.168    right/v_pipe/BRAM_reg_0_i_99__0_n_6
-    SLICE_X6Y4           LUT3 (Prop_lut3_I0_O)        0.306    17.474 r  right/v_pipe/BRAM_reg_0_i_91__0/O
-                         net (fo=1, routed)           0.551    18.025    right/v_pipe/BRAM_reg_0_i_91__0_n_0
-    SLICE_X9Y3           CARRY4 (Prop_carry4_DI[2]_CO[3])
-                                                      0.398    18.423 r  right/v_pipe/BRAM_reg_0_i_52__0/CO[3]
-                         net (fo=1, routed)           0.000    18.423    right/v_pipe/BRAM_reg_0_i_52__0_n_0
-    SLICE_X9Y4           CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    18.537 r  right/v_pipe/BRAM_reg_0_i_23__0/CO[3]
-                         net (fo=1, routed)           0.000    18.537    right/v_pipe/BRAM_reg_0_i_23__0_n_0
-    SLICE_X9Y5           CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    18.651 r  right/v_pipe/BRAM_reg_0_i_21__0/CO[3]
-                         net (fo=1, routed)           0.000    18.651    right/v_pipe/BRAM_reg_0_i_21__0_n_0
-    SLICE_X9Y6           CARRY4 (Prop_carry4_CI_O[1])
-                                                      0.334    18.985 r  right/v_pipe/BRAM_reg_0_i_19__0/O[1]
-                         net (fo=5, routed)           0.627    19.612    right/v_pipe/BRAM_reg_0_i_43__0_0[1]
-    SLICE_X8Y4           LUT2 (Prop_lut2_I1_O)        0.303    19.915 r  right/v_pipe/BRAM_reg_0_i_502__0/O
-                         net (fo=1, routed)           0.000    19.915    right/v_pipe/BRAM_reg_0_i_502__0_n_0
-    SLICE_X8Y4           CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.533    20.448 r  right/v_pipe/BRAM_reg_0_i_451__0/CO[3]
-                         net (fo=1, routed)           0.000    20.448    right/v_pipe/BRAM_reg_0_i_451__0_n_0
-    SLICE_X8Y5           CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.117    20.565 r  right/v_pipe/BRAM_reg_0_i_357__0/CO[3]
-                         net (fo=1, routed)           0.000    20.565    right/v_pipe/BRAM_reg_0_i_357__0_n_0
-    SLICE_X8Y6           CARRY4 (Prop_carry4_CI_O[2])
-                                                      0.239    20.804 r  right/v_pipe/BRAM_reg_0_i_266__0/O[2]
-                         net (fo=3, routed)           1.151    21.956    right/v_pipe/BRAM_reg_0_i_266__0_n_5
-    SLICE_X11Y15         LUT4 (Prop_lut4_I2_O)        0.301    22.257 r  right/v_pipe/BRAM_reg_0_i_355__0/O
-                         net (fo=1, routed)           0.000    22.257    right/v_pipe/BRAM_reg_0_i_355__0_n_0
-    SLICE_X11Y15         CARRY4 (Prop_carry4_S[1]_CO[3])
-                                                      0.550    22.807 r  right/v_pipe/BRAM_reg_0_i_253__0/CO[3]
-                         net (fo=1, routed)           0.000    22.807    right/v_pipe/BRAM_reg_0_i_253__0_n_0
-    SLICE_X11Y16         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    22.921 r  right/v_pipe/BRAM_reg_0_i_140__0/CO[3]
-                         net (fo=1, routed)           0.000    22.921    right/v_pipe/BRAM_reg_0_i_140__0_n_0
-    SLICE_X11Y17         CARRY4 (Prop_carry4_CI_CO[3])
-                                                      0.114    23.035 r  right/v_pipe/BRAM_reg_0_i_68__0/CO[3]
-                         net (fo=1, routed)           0.000    23.035    right/v_pipe/BRAM_reg_0_i_68__0_n_0
-    SLICE_X11Y18         CARRY4 (Prop_carry4_CI_CO[1])
-                                                      0.157    23.192 r  right/v_pipe/BRAM_reg_0_i_33__0/CO[1]
-                         net (fo=14, routed)          0.718    23.910    nolabel_line235/BRAM_reg_0_i_33__0_n_2_alias
-    SLICE_X15Y15         LUT6 (Prop_lut6_I4_O)        0.329    24.239 r  nolabel_line235/BRAM_reg_0_i_6__0_comp/O
-                         net (fo=4, routed)           1.477    25.716    nolabel_line235/right_frame_buffer/ADDRARDADDR[8]
-    RAMB36_X1Y2          RAMB36E1                                     r  nolabel_line235/right_frame_buffer/BRAM_reg_2/ADDRARDADDR[9]
+    DSP48_X0Y0           DSP48E1 (Prop_dsp48e1_CLK_P[5])
+                                                      4.009     9.177 r  left_rotated_addr1/P[5]
+                         net (fo=2, routed)           0.976    10.152    left/v_pipe/P[5]
+    SLICE_X8Y2           LUT3 (Prop_lut3_I2_O)        0.124    10.276 r  left/v_pipe/BRAM_reg_0_i_395/O
+                         net (fo=1, routed)           0.000    10.276    left/v_pipe/BRAM_reg_0_i_395_n_0
+    SLICE_X8Y2           CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533    10.809 r  left/v_pipe/BRAM_reg_0_i_294/CO[3]
+                         net (fo=1, routed)           0.000    10.809    left/v_pipe/BRAM_reg_0_i_294_n_0
+    SLICE_X8Y3           CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    10.926 r  left/v_pipe/BRAM_reg_0_i_290/CO[3]
+                         net (fo=1, routed)           0.000    10.926    left/v_pipe/BRAM_reg_0_i_290_n_0
+    SLICE_X8Y4           CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.043 r  left/v_pipe/BRAM_reg_0_i_251/CO[3]
+                         net (fo=1, routed)           0.000    11.043    left/v_pipe/BRAM_reg_0_i_251_n_0
+    SLICE_X8Y5           CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    11.358 r  left/v_pipe/BRAM_reg_0_i_250/O[3]
+                         net (fo=38, routed)          0.954    12.312    left/v_pipe/left_rotated_addr1__0[19]
+    SLICE_X6Y3           LUT3 (Prop_lut3_I2_O)        0.307    12.619 r  left/v_pipe/BRAM_reg_0_i_120/O
+                         net (fo=2, routed)           0.925    13.544    left/v_pipe/BRAM_reg_0_i_120_n_0
+    SLICE_X10Y5          CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.396    13.940 r  left/v_pipe/BRAM_reg_0_i_327/CO[3]
+                         net (fo=1, routed)           0.000    13.940    left/v_pipe/BRAM_reg_0_i_327_n_0
+    SLICE_X10Y6          CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.323    14.263 r  left/v_pipe/BRAM_reg_0_i_297/O[1]
+                         net (fo=3, routed)           0.726    14.990    left/v_pipe/BRAM_reg_0_i_297_n_6
+    SLICE_X11Y12         LUT3 (Prop_lut3_I1_O)        0.306    15.296 r  left/v_pipe/BRAM_reg_0_i_226/O
+                         net (fo=1, routed)           0.817    16.113    left/v_pipe/BRAM_reg_0_i_226_n_0
+    SLICE_X11Y6          CARRY4 (Prop_carry4_DI[2]_CO[3])
+                                                      0.398    16.511 r  left/v_pipe/BRAM_reg_0_i_99/CO[3]
+                         net (fo=1, routed)           0.000    16.511    left/v_pipe/BRAM_reg_0_i_99_n_0
+    SLICE_X11Y7          CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    16.845 r  left/v_pipe/BRAM_reg_0_i_87/O[1]
+                         net (fo=3, routed)           0.621    17.466    left/v_pipe/BRAM_reg_0_i_87_n_6
+    SLICE_X14Y8          LUT3 (Prop_lut3_I0_O)        0.303    17.769 r  left/v_pipe/BRAM_reg_0_i_54/O
+                         net (fo=1, routed)           0.323    18.091    left/v_pipe/BRAM_reg_0_i_54_n_0
+    SLICE_X13Y8          CARRY4 (Prop_carry4_DI[2]_CO[3])
+                                                      0.398    18.489 r  left/v_pipe/BRAM_reg_0_i_23/CO[3]
+                         net (fo=1, routed)           0.000    18.489    left/v_pipe/BRAM_reg_0_i_23_n_0
+    SLICE_X13Y9          CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    18.823 r  left/v_pipe/BRAM_reg_0_i_21/O[1]
+                         net (fo=5, routed)           0.578    19.401    left/v_pipe/BRAM_reg_0_i_51_0[1]
+    SLICE_X15Y8          LUT2 (Prop_lut2_I1_O)        0.303    19.704 r  left/v_pipe/BRAM_reg_0_i_541/O
+                         net (fo=1, routed)           0.000    19.704    left/v_pipe/BRAM_reg_0_i_541_n_0
+    SLICE_X15Y8          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    20.254 r  left/v_pipe/BRAM_reg_0_i_499/CO[3]
+                         net (fo=1, routed)           0.000    20.254    left/v_pipe/BRAM_reg_0_i_499_n_0
+    SLICE_X15Y9          CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    20.588 r  left/v_pipe/BRAM_reg_0_i_451/O[1]
+                         net (fo=3, routed)           0.938    21.526    left/v_pipe/BRAM_reg_0_i_451_n_6
+    SLICE_X28Y9          LUT4 (Prop_lut4_I1_O)        0.303    21.829 r  left/v_pipe/BRAM_reg_0_i_497/O
+                         net (fo=1, routed)           0.000    21.829    left/v_pipe/BRAM_reg_0_i_497_n_0
+    SLICE_X28Y9          CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    22.379 r  left/v_pipe/BRAM_reg_0_i_442/CO[3]
+                         net (fo=1, routed)           0.000    22.379    left/v_pipe/BRAM_reg_0_i_442_n_0
+    SLICE_X28Y10         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    22.493 r  left/v_pipe/BRAM_reg_0_i_348/CO[3]
+                         net (fo=1, routed)           0.000    22.493    left/v_pipe/BRAM_reg_0_i_348_n_0
+    SLICE_X28Y11         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    22.607 r  left/v_pipe/BRAM_reg_0_i_253/CO[3]
+                         net (fo=1, routed)           0.000    22.607    left/v_pipe/BRAM_reg_0_i_253_n_0
+    SLICE_X28Y12         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    22.721 r  left/v_pipe/BRAM_reg_0_i_140/CO[3]
+                         net (fo=1, routed)           0.000    22.721    left/v_pipe/BRAM_reg_0_i_140_n_0
+    SLICE_X28Y13         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    22.835 r  left/v_pipe/BRAM_reg_0_i_68/CO[3]
+                         net (fo=1, routed)           0.000    22.835    left/v_pipe/BRAM_reg_0_i_68_n_0
+    SLICE_X28Y14         CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    22.992 r  left/v_pipe/BRAM_reg_0_i_33/CO[1]
+                         net (fo=5, routed)           0.625    23.617    left/v_pipe/BRAM_reg_0_i_33_n_2
+    SLICE_X35Y14         LUT3 (Prop_lut3_I0_O)        0.329    23.946 r  left/v_pipe/BRAM_reg_0_i_17/O
+                         net (fo=10, routed)          0.801    24.747    nolabel_line237/BRAM_reg_3
+    SLICE_X48Y14         LUT5 (Prop_lut5_I1_O)        0.124    24.871 r  nolabel_line237/BRAM_reg_0_i_7/O
+                         net (fo=4, routed)           1.021    25.893    nolabel_line237/left_frame_buffer/ADDRARDADDR[7]
+    RAMB36_X1Y1          RAMB36E1                                     r  nolabel_line237/left_frame_buffer/BRAM_reg_0/ADDRARDADDR[8]
   -------------------------------------------------------------------    -------------------
 
                          (clock gclk rise edge)      10.000    10.000 r  
@@ -123,17 +125,17 @@ Slack (VIOLATED) :        -11.319ns  (required time - arrival time)
     N15                  IBUF (Prop_ibuf_I_O)         1.370    11.370 r  clk_100mhz_IBUF_inst/O
                          net (fo=1, routed)           1.868    13.238    clk_100mhz_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    13.329 r  clk_100mhz_IBUF_BUFG_inst/O
-                         net (fo=2474, routed)        1.483    14.812    nolabel_line235/right_frame_buffer/clk_100mhz_IBUF_BUFG
-    RAMB36_X1Y2          RAMB36E1                                     r  nolabel_line235/right_frame_buffer/BRAM_reg_2/CLKARDCLK
-                         clock pessimism              0.187    14.999    
-                         clock uncertainty           -0.035    14.963    
-    RAMB36_X1Y2          RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[9])
-                                                     -0.566    14.397    nolabel_line235/right_frame_buffer/BRAM_reg_2
+                         net (fo=2346, routed)        1.486    14.815    nolabel_line237/left_frame_buffer/clk_100mhz_IBUF_BUFG
+    RAMB36_X1Y1          RAMB36E1                                     r  nolabel_line237/left_frame_buffer/BRAM_reg_0/CLKARDCLK
+                         clock pessimism              0.187    15.002    
+                         clock uncertainty           -0.035    14.966    
+    RAMB36_X1Y1          RAMB36E1 (Setup_ramb36e1_CLKARDCLK_ADDRARDADDR[8])
+                                                     -0.566    14.400    nolabel_line237/left_frame_buffer/BRAM_reg_0
   -------------------------------------------------------------------
-                         required time                         14.397    
-                         arrival time                         -25.716    
+                         required time                         14.400    
+                         arrival time                         -25.893    
   -------------------------------------------------------------------
-                         slack                                -11.319    
+                         slack                                -11.493    
 
 
 

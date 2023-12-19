@@ -311,6 +311,7 @@ module top_level(
             SAVE_counter <= SAVE_counter + 1;
           end
 
+          rgb0 <= |min_ssd_sofar;
           
 
 
